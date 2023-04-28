@@ -67,9 +67,17 @@ function iniatlLanguage() {
     })
 }
 
+function adaptMobile() {
+    const footerNode = gradioApp().querySelector(`#footer-nav`);
+    const navList = footerNode.querySelectorAll('.nav-item');
+    const isMobile = window.innerWidth < 640;
+    isMobile && navList.forEach(nav => nav.classList.remove('nav-item'));
+}
+
 onUiLoaded(() => {
     generateLanguageSelectOptions()
     iniatlLanguage()
+    adaptMobile()
 })
 
 
