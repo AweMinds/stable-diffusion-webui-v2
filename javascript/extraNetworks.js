@@ -102,32 +102,38 @@ function extraNetworksSearchButton(tabs_id, event){
     updateInput(searchTextarea)
 }
 
-var globalPopup = null;
-var globalPopupInner = null;
-function popup(contents){
-    if(!globalPopup){
-        globalPopup = document.createElement('div')
-        globalPopup.onclick = function(){ globalPopup.style.display = "none"; };
-        globalPopup.classList.add('global-popup');
+var globalPopup = {
+    meta: null,
+    gallary: null
+};
+var globalPopupInner = {
+    meta: null,
+    gallary: null
+};
+function popup(contents, type){
+    if(!globalPopup[type]){
+        globalPopup[type] = document.createElement('div')
+        globalPopup[type].onclick = function(){  globalPopup[type].style.display = "none"; };
+        globalPopup[type].classList.add('global-popup');
 
         var close = document.createElement('div')
         close.classList.add('global-popup-close');
-        close.onclick = function(){ globalPopup.style.display = "none"; };
+        close.onclick = function(){ globalPopup[type].style.display = "none"; };
         close.title = "Close";
-        globalPopup.appendChild(close)
+        globalPopup[type].appendChild(close)
 
-        globalPopupInner = document.createElement('div')
-        globalPopupInner.onclick = function(event){ event.stopPropagation(); return false; };
-        globalPopupInner.classList.add('global-popup-inner');
-        globalPopup.appendChild(globalPopupInner)
+        globalPopupInner[type] = document.createElement('div')
+        globalPopupInner[type].onclick = function(event){ event.stopPropagation(); return false; };
+        globalPopupInner[type].classList.add('global-popup-inner');
+        globalPopup[type].appendChild(globalPopupInner[type])
 
-        gradioApp().appendChild(globalPopup);
+        gradioApp().appendChild(globalPopup[type]);
     }
 
-    globalPopupInner.innerHTML = '';
-    globalPopupInner.appendChild(contents);
+    globalPopupInner[type].innerHTML = '';
+    globalPopupInner[type].appendChild(contents);
 
-    globalPopup.style.display = "flex";
+    globalPopup[type].style.display = "flex";
 }
 
 function extraNetworksShowMetadata(text){
@@ -135,7 +141,7 @@ function extraNetworksShowMetadata(text){
     elem.classList.add('popup-metadata');
     elem.innerHTML = text;
 
-    popup(elem);
+    popup(elem, 'meta');
 }
 
 function requestGet(url, data, handler, errorHandler){
