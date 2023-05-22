@@ -372,7 +372,7 @@ def install_extension_from_url(request: gradio.routes.Request, dirname, url, bra
 
 
 def install_extension_from_index(request: gr.Request, url, hide_tags, sort_column, filter_text):
-    ext_table, message = install_extension_from_url(request, url)
+    ext_table, message = install_extension_from_url(request, None, url)
 
     code, _ = refresh_available_extensions_from_data(hide_tags, sort_column, filter_text)
 
