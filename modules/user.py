@@ -22,15 +22,17 @@ class User:
         uid = ''
         tire = ''
         if request:
-            headers = request.headers
-            if 'user-id' in headers:
-                uid = headers['user-id']
-            elif 'User-Id' in headers:
-                uid = headers['User-Id']
-            if 'User-Tire' in headers:
-                tire = headers['User-Tire']
-            elif 'user-tire' in headers:
-                tire = headers['user-tire']
+            if 'cookie' in request.headers:
+                cookie_ = request.headers['cookie']
+                user_id_pattern = r"user-id=([\w|-]+)"
+                user_tire_pattern = r"user-tire=([\w|-]+)"
+                user_id_match = re.search(user_id_pattern, cookie_)
+                user_tire_match = re.search(user_tire_pattern, cookie_)
+
+                if user_id_match:
+                    uid = user_id_match.group(1)
+                if user_tire_match:
+                    tire = user_tire_match.group(1)
         if not uid:
             # consider user as anonymous if User-Id is not present in request headers
             uid = 'anonymous'
