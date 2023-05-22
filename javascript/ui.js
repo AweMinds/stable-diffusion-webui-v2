@@ -168,6 +168,7 @@ function showRestoreProgressButton(tabname, show){
 }
 
 function submit(){
+    //AWETODO: 点击生成之后的响应函数，待研究
     rememberGallerySelection('txt2img_gallery')
     showSubmitButtons('txt2img', false)
 
@@ -280,8 +281,9 @@ const debounceCalcute = {
 
 async function calcuCreditTimes(width, height, batch_count, batch_size, steps, buttonId, hr_scale = 1) {
     try {
-        const response = await fetch(`/api/calculateConsume`, {
-            method: "POST", 
+        //AWETODO: 实现calculateConsume接口，生成图片所需的credit
+        const response = await fetch(`${aweApiUrl}/api/calculateConsume`, {
+            method: "POST",
             credentials: "include",
             headers: {
                 'Content-Type': 'application/json'
@@ -468,6 +470,7 @@ function restart_reload(){
 }
 
 function redirect_to_payment(need_upgrade){
+    // AWETODO: 先不跳转，后续实现credit不足跳转升级付费
     if (need_upgrade) {
         window.location.href = "/user?upgradeFlag=true";
     }
@@ -641,9 +644,9 @@ onUiLoaded(function(){
         const lightningIcon = rightContent.querySelector("div.upgrade-content > a > img");
         lightningIcon.style.filter = 'invert(100%)';
     }
-   
 
-    fetch(`${hostOrigin}/api/order_info`, {method: "GET", credentials: "include"}).then(res => {
+    // AWETODO: 实现order_info接口; 通过这个接口来获取用户信息
+    fetch(`${aweApiUrl}/api/order_info`, {method: "GET", credentials: "include"}).then(res => {
         if (res && res.ok && !res.redirected) {
             return res.json();
         }

@@ -56,6 +56,7 @@ def wrap_gpu_call(request: gradio.routes.Request, func, func_name, id_task, *arg
 
         # do gpu task
         progress.set_current_task_step('inference')
+        # WEBUILOGIC: 开始出来图片生成（1）
         res = func(request, *args, **kwargs)
         timer.record('inference')
 
@@ -105,9 +106,11 @@ def wrap_gradio_gpu_call(func, func_name: str = '', extra_outputs=None, add_moni
             if extra_outputs_array is None:
                 extra_outputs_array = [None, '', '']
             if add_monitor_state:
+                # AWETODO: 根据/monitor接口返回的httpcode（399~500），判断是否需要upgrade，最后一个值是need_upgrade
                 return extra_outputs_array + [str(e)], 399 < e.status_code < 500
             return extra_outputs_array + [str(e)]
 
+        # AWETODO：最后一个值是need_upgrade
         if add_monitor_state:
             return res, False
         return res

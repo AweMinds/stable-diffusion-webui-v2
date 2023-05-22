@@ -489,10 +489,12 @@ def create_ui():
     parameters_copypaste.reset()
 
     modules.scripts.scripts_current = modules.scripts.scripts_txt2img
+    # WEBUILOGIC: txt2img脚本初始化
     modules.scripts.scripts_txt2img.initialize_scripts(is_img2img=False)
 
     with gr.Blocks(analytics_enabled=False) as txt2img_interface:
         txt2img_prompt, txt2img_prompt_styles, txt2img_negative_prompt, submit, _, _, txt2img_prompt_style_apply, txt2img_save_style, txt2img_paste, extra_networks_button, token_counter, token_button, negative_token_counter, negative_token_button, restore_progress_button, txt2img_model_title, txt2img_vae_title = create_toprow(is_img2img=False)
+        # WEBUILOGIC: need_upgrade 勾选框
         need_upgrade = gr.Checkbox(
             value=False, interactive=False, visible=False, elem_classes="upgrade_checkbox")
 
@@ -636,6 +638,7 @@ def create_ui():
             txt2img_prompt.submit(**txt2img_args)
             submit.click(**txt2img_args)
 
+            # AWETODO: need_upgrade的更新逻辑是什么
             need_upgrade.change(None, [need_upgrade], None, _js="redirect_to_payment")
 
             res_switch_btn.click(lambda w, h: (h, w), inputs=[width, height], outputs=[width, height], show_progress=False)
@@ -724,6 +727,7 @@ def create_ui():
             ui_extra_networks.setup_ui(extra_networks_ui, txt2img_gallery)
 
     modules.scripts.scripts_current = modules.scripts.scripts_img2img
+    # WEBUILOGIC: img2img脚本初始化
     modules.scripts.scripts_img2img.initialize_scripts(is_img2img=True)
 
     with gr.Blocks(analytics_enabled=False) as img2img_interface:

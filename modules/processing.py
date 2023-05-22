@@ -506,6 +506,7 @@ def create_infotext(p, all_prompts, all_seeds, all_subseeds, comments=None, iter
     return f"{all_prompts[index]}{negative_prompt_text}\n{generation_params_text}".strip()
 
 
+# WEBUILOGIC: process_images，图片出来流程（4）
 def process_images(p: StableDiffusionProcessing) -> Processed:
     stored_opts = {k: opts.data[k] for k in p.override_settings.keys()}
 
@@ -537,7 +538,7 @@ def process_images(p: StableDiffusionProcessing) -> Processed:
 
     return res
 
-
+# WEBUILOGIC：process_images_inner, 图片处理的详细逻辑（5）
 def process_images_inner(p: StableDiffusionProcessing) -> Processed:
     """this is the main loop that both txt2img and img2img use; it calls func_init once inside all the scopes and func_sample once per batch"""
 
@@ -591,6 +592,7 @@ def process_images_inner(p: StableDiffusionProcessing) -> Processed:
     cached_uc = [None, None]
     cached_c = [None, None]
 
+    # WEBUILOGIC: get_conds_with_caching，从缓存中获取使用过的参数（6）
     def get_conds_with_caching(function, required_prompts, steps, cache):
         """
         Returns the result of calling function(shared.sd_model, required_prompts, steps)

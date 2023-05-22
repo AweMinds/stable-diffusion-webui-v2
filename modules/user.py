@@ -1,6 +1,8 @@
 # represent a user
 # each user has a standalone work dir
+import re
 
+# AWETODO: 实现user身份体系
 class User:
     def __init__(self, uid, gid, tire):
         self._uid = uid

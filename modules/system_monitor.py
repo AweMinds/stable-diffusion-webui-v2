@@ -21,7 +21,7 @@ class MonitorException(Exception):
     def __repr__(self) -> str:
         return self._msg
 
-
+# AWETODO：准备计算credit的对象，后续可以修改这里适配我们自己的算法
 def _make_gpu_consumption(func_name, named_args, *args, **kwargs) -> dict:
     """
     Make the object which will be used to calculate the consume by FE.
@@ -150,6 +150,7 @@ def _extract_task_id(*args):
 def on_task(request: gr.Request, func, task_info, *args, **kwargs):
     monitor_addr = modules.shared.cmd_opts.system_monitor_addr
     system_monitor_api_secret = modules.shared.cmd_opts.system_monitor_api_secret
+    # AWETODO：实现system monitor, 启动的时候带上服务器地址和secret
     if not monitor_addr or not system_monitor_api_secret:
         logger.error('system_monitor_addr or system_monitor_api_secret is not present')
         return None
@@ -192,6 +193,7 @@ def on_task(request: gr.Request, func, task_info, *args, **kwargs):
         'node': os.getenv('HOST_IP', default=''),
         'added_at': task_info.get('added_at', time.time()),
     }
+    # AWETODO：实现monit server接口，接收任务信息
     resp = requests.post(monitor_addr,
                          headers={
                              'Api-Secret': system_monitor_api_secret,
@@ -215,6 +217,7 @@ def on_task_finished(request: gr.Request, monitor_log_id: str, status: str, mess
         logger.error('system_monitor_addr or system_monitor_api_secret is not present')
         return
     request_url = f'{monitor_addr}/{monitor_log_id}'
+    # AWETODO：实现monit server接口，接收任务结束信息
     resp = requests.post(request_url,
                          headers={
                              'Api-Secret': system_monitor_api_secret,
