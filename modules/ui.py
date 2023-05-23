@@ -1741,14 +1741,14 @@ def create_ui():
 
     with gr.Blocks(theme=shared.gradio_theme, analytics_enabled=False, title="GRAVITI Diffus") as demo:
         with gr.Row(elem_id="topbar"):
-            with gr.Column(elem_id="user-setting", min_width=500, scale=2):
-                gr.HTML(
-                    value="<div class='user-content'><div class='right-content'><div class='discord-icon'><a title='Join Discord' href='https://discord.gg/QfBbBYqQ7z'><img src='/public/image/discord.png' /></a></div><div title='Unlock more credits' class='upgrade-content' style='display: none'><a href='/user#/subscription?type=subscription'><img src='/public/image/lightning.png'/><span>Upgrade</span></a></div></div>"
-                            "<div style='display: none;justify-content: flex-end;' class='user_info'><a href='/user'><img "
-                            "src=''"
-                            "/></a><div class='user_info-name'><span></span><a "
-                            "href='/api/logout' target='_self'>Log out</a></div></div></div>",
-                    show_label=False)
+            # with gr.Column(elem_id="user-setting", min_width=500, scale=2):
+            #     gr.HTML(
+            #         value="<div class='user-content'><div class='right-content'><div class='discord-icon'><a title='Join Discord' href='https://discord.gg/QfBbBYqQ7z'><img src='/public/image/discord.png' /></a></div><div title='Unlock more credits' class='upgrade-content' style='display: none'><a href='/user#/subscription?type=subscription'><img src='/public/image/lightning.png'/><span>Upgrade</span></a></div></div>"
+            #                 "<div style='display: none;justify-content: flex-end;' class='user_info'><a href='/user'><img "
+            #                 "src=''"
+            #                 "/></a><div class='user_info-name'><span></span><a "
+            #                 "href='/api/logout' target='_self'>Log out</a></div></div></div>",
+            #         show_label=False)
             with gr.Column(scale=6, min_width=850):
                 with gr.Row(elem_id="quicksettings"):
                     for i, k, item in sorted(quicksettings_list, key=lambda x: quicksettings_names.get(x[1], x[0])):
