@@ -72,6 +72,8 @@ def commit_hash():
 
 
 def run(command, desc=None, errdesc=None, custom_env=None, live=False):
+    # AWETODO: 打印启动命令
+    print(command)
     if desc is not None:
         print(desc)
 
