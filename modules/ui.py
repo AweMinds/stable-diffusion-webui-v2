@@ -946,6 +946,7 @@ def create_ui():
             connect_reuse_seed(seed, reuse_seed, generation_info, dummy_component, is_subseed=False)
             connect_reuse_seed(subseed, reuse_subseed, generation_info, dummy_component, is_subseed=True)
 
+            # AWETODO: img2img参数变化的响应事件
             selectors = [batch_count, width, height, batch_size, steps]
             for selector in selectors:
                 selector.change(
