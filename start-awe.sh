@@ -17,6 +17,7 @@ then
     echo "Skipping auto-start of webui"
 else
     echo "Started webui through relauncher script"
+    mkdir -p logs
     for ((i = 0; i < GPU_COUNT; i++)); do
       port=$(expr ${start_port} + ${i})
       python relauncher-awe.py --port ${port} --device-id ${i} &

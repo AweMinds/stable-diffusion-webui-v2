@@ -17,7 +17,8 @@ while n < 5:
     if n > 0:
         print(f'\tRelaunch count: {n}')
 
-    launch_string = f"./webui.sh -f --port {args.port} --device-id {args.device_id} --opt-sdp-attention --listen"
+    launch_string = f"./webui.sh -f --port {args.port} --device-id {args.device_id} --opt-sdp-attention --listen " \
+                    f"--logging-file-dir ./logs --logging-level DEBUG"
 
     print(f"[Device {args.device_id}] - launch_string: {launch_string}")
     os.system(launch_string)
