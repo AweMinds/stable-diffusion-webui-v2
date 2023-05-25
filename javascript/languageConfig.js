@@ -60,7 +60,7 @@ function iniatlLanguage() {
         setSelectChecked('language-select', cookieLanguage);
     } else {
         const language = laguageList.find(item => item.toLowerCase() === navigatorLanguage.toLowerCase());
-        setSelectChecked('language-select', language ? language : 'None');
+        setSelectChecked('language-select', language ? language : 'zh_CN');
         Cookies.set(languageCookieKey, navigatorLanguage);
         language && location.reload();
     }
