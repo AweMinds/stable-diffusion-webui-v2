@@ -645,13 +645,13 @@ onUiLoaded(function(){
 
     const {origin: hostOrigin, search} = location;
     const isDarkTheme = /theme=dark/g.test(search);
-    if (isDarkTheme) {
-        const rightContent = gradioApp().querySelector(".right-content");
-        const discordIcon = rightContent.querySelector("div.discord-icon > a > img");
-        discordIcon.style.filter = 'invert(100%)';
-        const lightningIcon = rightContent.querySelector("div.upgrade-content > a > img");
-        lightningIcon.style.filter = 'invert(100%)';
-    }
+    // if (isDarkTheme) {
+    //     const rightContent = gradioApp().querySelector(".right-content");
+    //     const discordIcon = rightContent.querySelector("div.discord-icon > a > img");
+    //     discordIcon.style.filter = 'invert(100%)';
+    //     const lightningIcon = rightContent.querySelector("div.upgrade-content > a > img");
+    //     lightningIcon.style.filter = 'invert(100%)';
+    // }
 
     // AWETODO: 实现order_info接口; 通过这个接口来获取用户信息
     fetch(`${aweApiUrl}/api/order_info`, {method: "GET", credentials: "include"}).then(res => {
