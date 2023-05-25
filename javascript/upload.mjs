@@ -1,4 +1,4 @@
-import { setup_uppy_for_upload_button } from "/public/js/upply.mjs"
+import { setup_uppy_for_upload_button } from "/components/js/upply.mjs"
 
 if (typeof setup_uppy_for_upload_button != "undefined") {
     const tus_endpoint = '/files/';
