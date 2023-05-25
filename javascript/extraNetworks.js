@@ -253,11 +253,11 @@ async function handleData({response, tabname, model_type }) {
         }
     })
 
-    if (model_list.length  === 0) {
-        uploadBtnNode.style.display = 'block';
-    } else {
+    // if (model_list.length  === 0) {
+    //     uploadBtnNode.style.display = 'block';
+    // } else {
         uploadBtnNode.style.display = 'none';
-    }
+    // }
     
     // add new child
     model_list.forEach(item => {
