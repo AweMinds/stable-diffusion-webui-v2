@@ -6,6 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 import traceback
 import time
 import functools
+import gradio as gr
 
 import gradio.routes
 
@@ -106,6 +107,10 @@ def wrap_gradio_gpu_call(func, func_name: str = '', extra_outputs=None, add_moni
             if extra_outputs_array is None:
                 extra_outputs_array = [None, '', '']
             if add_monitor_state:
+                # 如果status code ==413，说明Prompt长度超过限制
+                if e.status_code == 413:
+                    raise gr.Error("提示词过长，请修改")
+
                 # AWETODO: 根据/monitor接口返回的httpcode（399~500），判断是否需要upgrade，最后一个值是need_upgrade
                 return extra_outputs_array + [str(e)], 399 < e.status_code < 500
             return extra_outputs_array + [str(e)]
