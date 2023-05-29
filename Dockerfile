@@ -18,7 +18,7 @@ RUN git clone -b aweminds https://github.com/AweMinds/stable-diffusion-webui.git
 #RUN ./venv/bin/activate
 
 ## 安装依赖
-RUN python -c "import launch; launch.prepare_environment()"
+RUN python -c "import launch; launch.prepare_environment(True)"
 #RUN pip install --no-cache-dir -r requirements.txt
 
 # 暴露端口
