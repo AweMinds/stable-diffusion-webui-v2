@@ -13,6 +13,7 @@ RUN apt install -y wget git python3 python3-venv python3-pip
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 RUN git clone -b aweminds https://github.com/AweMinds/stable-diffusion-webui.git .
+RUN git checkout aweminds
 
 #RUN python3 -m venv venv
 #RUN ./venv/bin/activate
