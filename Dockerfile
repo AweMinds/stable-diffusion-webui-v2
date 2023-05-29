@@ -1,19 +1,28 @@
 # 使用官方推荐镜像作为基础镜像
 #FROM runpod/stable-diffusion:web-automatic-6.0.0
-FROM kent0113/sd-webui-aki:v1
+FROM ubuntu:22.04
 
 # 设置工作目录
-WORKDIR /
+WORKDIR /app
 
-# 复制start-awe.sh，作为启动脚本
-COPY start-awe.sh ./start-awe.sh
-RUN chmod a+x start-awe.sh
+## 复制工程文件
+#COPY . .
 
-# 设置工作目录
-WORKDIR /workspace/stable-diffusion-webui
+RUN apt update
+RUN apt install -y wget git python3 python3-venv python3-pip
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
-# 复制relauncher-awe.py，作为启动的python文件
-COPY relauncher-awe.py ./relauncher-awe.py
+RUN git clone -b aweminds https://github.com/AweMinds/stable-diffusion-webui.git .
 
-# 复制config.json 修改了quicksettings
-COPY config.json ./config.json
+#RUN python3 -m venv venv
+#RUN ./venv/bin/activate
+
+## 安装依赖
+RUN python -c "import launch; launch.prepare_environment()"
+#RUN pip install --no-cache-dir -r requirements.txt
+
+# 暴露端口
+EXPOSE 7860
+
+# 启动应用
+CMD ["bash", "start-awe.sh"]
