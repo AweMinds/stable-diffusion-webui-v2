@@ -1,6 +1,6 @@
 # 使用官方推荐镜像作为基础镜像
 #FROM runpod/stable-diffusion:web-automatic-6.0.0
-FROM registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:1.1-slim
+FROM registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:1.1-slim-amd64
 
 # 设置工作目录
 WORKDIR /app
