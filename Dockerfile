@@ -13,13 +13,16 @@ RUN apt install -y wget git python3 python3-venv python3-pip
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 RUN git clone -b aweminds https://github.com/AweMinds/stable-diffusion-webui.git .
-RUN git checkout aweminds
 
 #RUN python3 -m venv venv
 #RUN ./venv/bin/activate
 
 ## 安装依赖
-RUN python -c "import launch_awe; launch_awe.prepare_environment()"
+RUN python -c "import launch_awe; launch_awe.prepare_python_check()"
+RUN python -c "import launch_awe; launch_awe.prepare_torch()"
+RUN python -c "import launch_awe; launch_awe.prepare_pip()"
+RUN python -c "import launch_awe; launch_awe.prepare_git_repo()"
+RUN python -c "import launch_awe; launch_awe.prepare_requirement()"
 #RUN pip install --no-cache-dir -r requirements.txt
 
 # 暴露端口

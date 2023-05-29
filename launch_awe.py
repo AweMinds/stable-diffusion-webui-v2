@@ -224,15 +224,36 @@ def run_extensions_installers(settings_file):
         run_extension_installer(os.path.join(extensions_dir, dirname_extension))
 
 
+def prepare_python_check():
+    if not args.skip_python_version_check:
+        check_python_version()
+
+    commit = commit_hash()
+
+    print(f"Python {sys.version}")
+    print(f"Commit hash: {commit}")
+
+    if "--exit" in sys.argv:
+        print("Exiting because of --exit argument")
+        exit(0)
+
 def prepare_torch():
     torch_command = os.environ.get('TORCH_COMMAND', "pip install torch==2.0.0 torchvision==0.15.1 --extra-index-url https://download.pytorch.org/whl/cu118")
     if args.reinstall_torch or not is_installed("torch") or not is_installed("torchvision"):
         run(f'"{python}" -m {torch_command}', "Installing torch and torchvision", "Couldn't install torch", live=True)
 
+    if "--exit" in sys.argv:
+        print("Exiting because of --exit argument")
+        exit(0)
+
 
 def torch_cuda_test():
     if not args.skip_torch_cuda_test:
         run_python("import torch; assert torch.cuda.is_available(), 'Torch is not able to use GPU; add --skip-torch-cuda-test to COMMANDLINE_ARGS variable to disable this check'")
+
+    if "--exit" in sys.argv:
+        print("Exiting because of --exit argument")
+        exit(0)
 
 
 def prepare_pip():
@@ -266,6 +287,10 @@ def prepare_pip():
     if not is_installed("pyngrok") and args.ngrok:
         run_pip("install pyngrok", "ngrok")
 
+    if "--exit" in sys.argv:
+        print("Exiting because of --exit argument")
+        exit(0)
+
 
 def prepare_git_repo():
     stable_diffusion_repo = os.environ.get('STABLE_DIFFUSION_REPO', "https://github.com/Stability-AI/stablediffusion.git")
@@ -288,6 +313,10 @@ def prepare_git_repo():
     git_clone(codeformer_repo, repo_dir('CodeFormer'), "CodeFormer", codeformer_commit_hash)
     git_clone(blip_repo, repo_dir('BLIP'), "BLIP", blip_commit_hash)
 
+    if "--exit" in sys.argv:
+        print("Exiting because of --exit argument")
+        exit(0)
+
 
 def prepare_requirement():
     requirements_file = os.environ.get('REQS_FILE', "requirements_versions.txt")
@@ -303,85 +332,12 @@ def prepare_requirement():
 
 
 def prepare_environment():
-    # torch_command = os.environ.get('TORCH_COMMAND', "pip install torch==2.0.0 torchvision==0.15.1 --extra-index-url https://download.pytorch.org/whl/cu118")
-    # requirements_file = os.environ.get('REQS_FILE', "requirements_versions.txt")
-
-    # xformers_package = os.environ.get('XFORMERS_PACKAGE', 'xformers==0.0.17')
-    # gfpgan_package = os.environ.get('GFPGAN_PACKAGE', "git+https://github.com/TencentARC/GFPGAN.git@8d2447a2d918f8eba5a4a01463fd48e45126a379")
-    # clip_package = os.environ.get('CLIP_PACKAGE', "git+https://github.com/openai/CLIP.git@d50d76daa670286dd6cacf3bcd80b5e4823fc8e1")
-    # openclip_package = os.environ.get('OPENCLIP_PACKAGE', "git+https://github.com/mlfoundations/open_clip.git@bb6e834e9c70d9c27d0dc3ecedeebeaeb1ffad6b")
-
-    # stable_diffusion_repo = os.environ.get('STABLE_DIFFUSION_REPO', "https://github.com/Stability-AI/stablediffusion.git")
-    # taming_transformers_repo = os.environ.get('TAMING_TRANSFORMERS_REPO', "https://github.com/CompVis/taming-transformers.git")
-    # k_diffusion_repo = os.environ.get('K_DIFFUSION_REPO', 'https://github.com/crowsonkb/k-diffusion.git')
-    # codeformer_repo = os.environ.get('CODEFORMER_REPO', 'https://github.com/sczhou/CodeFormer.git')
-    # blip_repo = os.environ.get('BLIP_REPO', 'https://github.com/salesforce/BLIP.git')
-    #
-    # stable_diffusion_commit_hash = os.environ.get('STABLE_DIFFUSION_COMMIT_HASH', "cf1d67a6fd5ea1aa600c4df58e5b47da45f6bdbf")
-    # taming_transformers_commit_hash = os.environ.get('TAMING_TRANSFORMERS_COMMIT_HASH', "24268930bf1dce879235a7fddd0b2355b84d7ea6")
-    # k_diffusion_commit_hash = os.environ.get('K_DIFFUSION_COMMIT_HASH', "5b3af030dd83e0297272d861c19477735d0317ec")
-    # codeformer_commit_hash = os.environ.get('CODEFORMER_COMMIT_HASH', "c5b4593074ba6214284d6acd5f1719b6c5d739af")
-    # blip_commit_hash = os.environ.get('BLIP_COMMIT_HASH', "48211a1594f1321b00f14c9f7a5b4813144b2fb9")
-
-    if not args.skip_python_version_check:
-        check_python_version()
-
-    commit = commit_hash()
-
-    print(f"Python {sys.version}")
-    print(f"Commit hash: {commit}")
-
+    prepare_python_check()
     prepare_torch()
-    # if args.reinstall_torch or not is_installed("torch") or not is_installed("torchvision"):
-    #     run(f'"{python}" -m {torch_command}', "Installing torch and torchvision", "Couldn't install torch", live=True)
-
     # torch_cuda_test()
-    # if not args.skip_torch_cuda_test:
-    #     run_python("import torch; assert torch.cuda.is_available(), 'Torch is not able to use GPU; add --skip-torch-cuda-test to COMMANDLINE_ARGS variable to disable this check'")
-
     prepare_pip()
-    # if not is_installed("gfpgan"):
-    #     run_pip(f"install {gfpgan_package}", "gfpgan")
-    #
-    # if not is_installed("clip"):
-    #     run_pip(f"install {clip_package}", "clip")
-    #
-    # if not is_installed("open_clip"):
-    #     run_pip(f"install {openclip_package}", "open_clip")
-    #
-    # if (not is_installed("xformers") or args.reinstall_xformers) and args.xformers:
-    #     if platform.system() == "Windows":
-    #         if platform.python_version().startswith("3.10"):
-    #             run_pip(f"install -U -I --no-deps {xformers_package}", "xformers", live=True)
-    #         else:
-    #             print("Installation of xformers is not supported in this version of Python.")
-    #             print("You can also check this and build manually: https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Xformers#building-xformers-on-windows-by-duckness")
-    #             if not is_installed("xformers"):
-    #                 exit(0)
-    #     elif platform.system() == "Linux":
-    #         run_pip(f"install {xformers_package}", "xformers")
-    #
-    # if not is_installed("pyngrok") and args.ngrok:
-    #     run_pip("install pyngrok", "ngrok")
-
     prepare_git_repo()
-    # os.makedirs(os.path.join(script_path, dir_repos), exist_ok=True)
-    #
-    # git_clone(stable_diffusion_repo, repo_dir('stable-diffusion-stability-ai'), "Stable Diffusion", stable_diffusion_commit_hash)
-    # git_clone(taming_transformers_repo, repo_dir('taming-transformers'), "Taming Transformers", taming_transformers_commit_hash)
-    # git_clone(k_diffusion_repo, repo_dir('k-diffusion'), "K-diffusion", k_diffusion_commit_hash)
-    # git_clone(codeformer_repo, repo_dir('CodeFormer'), "CodeFormer", codeformer_commit_hash)
-    # git_clone(blip_repo, repo_dir('BLIP'), "BLIP", blip_commit_hash)
-
     prepare_requirement()
-    # if not is_installed("lpips"):
-    #     run_pip(f"install -r \"{os.path.join(repo_dir('CodeFormer'), 'requirements.txt')}\"", "requirements for CodeFormer")
-    #
-    # if not os.path.isfile(requirements_file):
-    #     requirements_file = os.path.join(script_path, requirements_file)
-    # run_pip(f"install -r \"{requirements_file}\"", "requirements")
-    #
-    # run_extensions_installers(settings_file=args.ui_settings_file)
 
     if args.update_check:
         version_check(commit)
