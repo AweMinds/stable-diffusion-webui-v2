@@ -425,4 +425,4 @@ def _config_logging(component):
 
 if __name__ == "__main__":
     prepare_environment()
-    start()
+    # start()
