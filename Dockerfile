@@ -19,7 +19,7 @@ RUN git checkout aweminds
 #RUN ./venv/bin/activate
 
 ## 安装依赖
-RUN python -c "import launch; launch.prepare_environment(True)"
+RUN python -c "import launch_awe; launch_awe.prepare_environment()"
 #RUN pip install --no-cache-dir -r requirements.txt
 
 # 暴露端口
