@@ -33,13 +33,14 @@ while True:
     if not SYSTEM_MONITOR_ADDR:
         pass
     else:
-        launch_string += f"--system-monitor-addr {SYSTEM_MONITOR_ADDR} " \
-                         f"--system-monitor-api-secret {SYSTEM_MONITOR_API_SECRET}"
+        launch_string += f" --system-monitor-addr {SYSTEM_MONITOR_ADDR}" \
+                         f" --system-monitor-api-secret {SYSTEM_MONITOR_API_SECRET}"
 
     if not HOST_SYSTEM_TYPE:
         pass
     elif HOST_SYSTEM_TYPE == "macOS":
-        launch_string += " --skip-torch-cuda-test"
+        launch_string += " --skip-torch-cuda-test --skip-torch-cuda-test --upcast-sampling" \
+                         " --no-half-vae --use-cpu interrogate"
 
     logging.info(f"[Device {args.device_id}] - launch_string: {launch_string}")
     os.system(launch_string)
