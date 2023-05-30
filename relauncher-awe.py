@@ -17,7 +17,7 @@ logging.info("device-id: " + args.device_id)
 
 SYSTEM_MONITOR_ADDR = os.environ.get('SYSTEM_MONITOR_ADDR')
 SYSTEM_MONITOR_API_SECRET = os.environ.get('SYSTEM_MONITOR_API_SECRET')
-HOST_SYSTEM_TYPE = os.environ.get('HOST_SYSTEM_TYPE')
+START_ARGS = os.environ.get("START_ARGS")
 
 n = 0
 while True:
@@ -36,11 +36,10 @@ while True:
         launch_string += f" --system-monitor-addr {SYSTEM_MONITOR_ADDR}" \
                          f" --system-monitor-api-secret {SYSTEM_MONITOR_API_SECRET}"
 
-    if not HOST_SYSTEM_TYPE:
+    if not START_ARGS:
         pass
-    elif HOST_SYSTEM_TYPE == "macOS":
-        launch_string += " --skip-torch-cuda-test --skip-torch-cuda-test --upcast-sampling" \
-                         " --no-half-vae --use-cpu interrogate"
+    else:
+        launch_string += f" {SYSTEM_MONITOR_ADDR}"
 
     logging.info(f"[Device {args.device_id}] - launch_string: {launch_string}")
     os.system(launch_string)
