@@ -39,7 +39,7 @@ while True:
     if not START_ARGS:
         pass
     else:
-        launch_string += f" {SYSTEM_MONITOR_ADDR}"
+        launch_string += f" {START_ARGS}"
 
     logging.info(f"[Device {args.device_id}] - launch_string: {launch_string}")
     os.system(launch_string)
