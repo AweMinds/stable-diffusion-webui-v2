@@ -16,11 +16,14 @@ RUN apt-get install -y sox ffmpeg libcairo2 libcairo2-dev
 
 #下载代码
 RUN git clone -b aweminds https://github.com/AweMinds/stable-diffusion-webui.git .
-RUN mv config_prd.json config.json
 
-## 安装webUI依赖
+# 安装webUI依赖
 RUN ./webui_awe.sh -f --skip-torch-cuda-test
-RUN ln -s /app/venv/lib/python3.10/site-packages/torch/lib/libnvrtc-672ee683.so.11.2 libnvrtc.so
+
+#文件操作
+RUN ln -s /app/venv/lib/python3.10/site-packages/torch/lib/libnvrtc-672ee683.so.11.2 /app/venv/lib/python3.10/site-packages/torch/lib/libnvrtc.so
+RUN mv config_prd.json config.json
+RUN mv cache_prd.json cache.json
 
 ## 暴露端口
 EXPOSE 7860 7861 7862 7863

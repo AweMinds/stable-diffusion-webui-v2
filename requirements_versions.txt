@@ -30,7 +30,10 @@ httpcore<=0.15
 fastapi==0.94.0
 redis==4.5.4
 
-#dependency of controlnet
+##dependency of controlnet
+#sd-webui-controlnet
 mediapipe
 svglib
 fvcore
+#sd-webui-controlnet
+diffusers
