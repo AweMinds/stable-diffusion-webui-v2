@@ -15,6 +15,10 @@ args = parser.parse_args()
 logging.info("port: " + args.port)
 logging.info("device-id: " + args.device_id)
 
+SYSTEM_MONITOR_ADDR = os.environ.get('SYSTEM_MONITOR_ADDR')
+SYSTEM_MONITOR_API_SECRET = os.environ.get('SYSTEM_MONITOR_API_SECRET')
+HOST_SYSTEM_TYPE = os.environ.get('HOST_SYSTEM_TYPE')
+
 n = 0
 while True:
     logging.info(f"[Device {args.device_id}] -  Relauncher: Launching...")
@@ -25,7 +29,17 @@ while True:
     launch_string = f"./webui.sh -f --port {args.port} --device-id {args.device_id} --opt-sdp-attention --listen " \
                     f"--logging-file-dir ./logs --logging-level DEBUG " \
                     f"--theme dark --opt-channelslast"
-    # f"--system-monitor-addr http://47.100.10.24:8080/api/monitor --system-monitor-api-secret API_SECRET " \
+
+    if not SYSTEM_MONITOR_ADDR:
+        pass
+    else:
+        launch_string += f"--system-monitor-addr {SYSTEM_MONITOR_ADDR} " \
+                         f"--system-monitor-api-secret {SYSTEM_MONITOR_API_SECRET}"
+
+    if not HOST_SYSTEM_TYPE:
+        pass
+    elif HOST_SYSTEM_TYPE == "macOS":
+        launch_string += " --skip-torch-cuda-test"
 
     logging.info(f"[Device {args.device_id}] - launch_string: {launch_string}")
     os.system(launch_string)
