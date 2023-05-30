@@ -13,7 +13,6 @@ RUN apt install -y libgl1-mesa-glx libglib2.0-0 google-perftools
 
 #安装ControlNet依赖
 RUN apt-get install -y sox ffmpeg libcairo2 libcairo2-dev
-RUN pip3 install mediapipe svglib fvcore
 
 #下载代码
 RUN git clone -b aweminds https://github.com/AweMinds/stable-diffusion-webui.git .

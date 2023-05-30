@@ -29,3 +29,8 @@ safetensors==0.3.1
 httpcore<=0.15
 fastapi==0.94.0
 redis==4.5.4
+
+#dependency of controlnet
+mediapipe
+svglib
+fvcore
