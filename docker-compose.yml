@@ -1,0 +1,90 @@
+version: '3'
+
+services:
+  webui0:
+    image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:1.0-slim-amd64
+    container_name: webui0
+    environment:
+      START_ARGS: "--no-half-vae  --upcast-sampling  --opt-split-attention"
+    ports:
+      - "7860:7860"
+    restart: on-failure
+    volumes:
+      - /stable-diffusion-webui/models:/app/models
+      - /stable-diffusion-webui/extensions:/app/extensions
+      - /stable-diffusion-webui/embeddings:/app/embeddings
+      - /stable-diffusion-webui/repositories:/app/repositories
+      - /root/.cache:/root/.cache
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: [ '0' ]
+              capabilities: [ gpu ]
+
+  webui1:
+    image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:1.0-slim-amd64
+    container_name: webui1
+    environment:
+      START_ARGS: "--no-half-vae  --upcast-sampling  --opt-split-attention"
+    ports:
+      - "7861:7860"
+    restart: on-failure
+    volumes:
+      - /stable-diffusion-webui/models:/app/models
+      - /stable-diffusion-webui/extensions:/app/extensions
+      - /stable-diffusion-webui/embeddings:/app/embeddings
+      - /stable-diffusion-webui/repositories:/app/repositories
+      - /root/.cache:/root/.cache
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: [ '1' ]
+              capabilities: [ gpu ]
+
+  webui2:
+    image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:1.0-slim-amd64
+    container_name: webui0
+    environment:
+      START_ARGS: "--no-half-vae  --upcast-sampling  --opt-split-attention"
+    ports:
+      - "7862:7860"
+    restart: on-failure
+    volumes:
+      - /stable-diffusion-webui/models:/app/models
+      - /stable-diffusion-webui/extensions:/app/extensions
+      - /stable-diffusion-webui/embeddings:/app/embeddings
+      - /stable-diffusion-webui/repositories:/app/repositories
+      - /root/.cache:/root/.cache
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: [ '2' ]
+              capabilities: [ gpu ]
+
+  webui3:
+    image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:1.0-slim-amd64
+    container_name: webui3
+    environment:
+      START_ARGS: "--no-half-vae  --upcast-sampling  --opt-split-attention"
+    ports:
+      - "7863:7860"
+    restart: on-failure
+    volumes:
+      - /stable-diffusion-webui/models:/app/models
+      - /stable-diffusion-webui/extensions:/app/extensions
+      - /stable-diffusion-webui/embeddings:/app/embeddings
+      - /stable-diffusion-webui/repositories:/app/repositories
+      - /root/.cache:/root/.cache
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: [ '3' ]
+              capabilities: [ gpu ]
