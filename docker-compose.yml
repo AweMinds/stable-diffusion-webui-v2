@@ -47,7 +47,7 @@ services:
 
   webui2:
     image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:1.0-slim-amd64
-    container_name: webui0
+    container_name: webui2
     environment:
       START_ARGS: "--no-half-vae  --upcast-sampling  --opt-split-attention"
     ports:
