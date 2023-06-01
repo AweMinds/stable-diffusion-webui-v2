@@ -480,6 +480,7 @@ def create_override_settings_dropdown(tabname, row):
     return dropdown
 
 
+# AWETODO: 创建UI入口
 def create_ui():
     import modules.img2img
     import modules.txt2img
@@ -2003,6 +2004,18 @@ def javascript_html(request: gr.Request):
     return head
 
 
+def header_html():
+    head = ""
+    if cmd_opts.enable_html_footer is True:
+        head += f"""
+        <header class="header">
+            <img class="logo" src="/components/icons/logo_text.png" alt="AweMinds Logo">
+            <button class="button">注册/登录</button>
+        </header>
+        <hr class="header_separator">\n
+        """
+    return head
+
 def css_html():
     head = ""
 
@@ -2029,6 +2042,7 @@ def reload_javascript():
 
     def template_response(*args, **kwargs):
         js = javascript_html(args[1]['request'])
+        js += header_html()
         res = shared.GradioTemplateResponseOriginal(*args, **kwargs)
         res.body = res.body.replace(b'</head>', f'{js}</head>'.encode("utf8"))
         res.body = res.body.replace(b'</body>', f'{css}</body>'.encode("utf8"))
