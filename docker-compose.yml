@@ -2,11 +2,10 @@ version: '3'
 
 services:
   webui0:
-    image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:1.0.1-slim-amd64
+    image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:latest-amd64
     container_name: webui0
     environment:
       START_ARGS: "--no-half-vae --upcast-sampling --opt-split-attention --enable-html-footer"
-      UPDATE_CODE: 1
     ports:
       - "7860:7860"
     restart: on-failure
@@ -27,7 +26,7 @@ services:
               capabilities: [ gpu ]
 
   webui1:
-    image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:1.0.1-slim-amd64
+    image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:latest-amd64
     container_name: webui1
     environment:
       START_ARGS: "--no-half-vae --upcast-sampling --opt-split-attention --enable-html-footer"
@@ -52,7 +51,7 @@ services:
               capabilities: [ gpu ]
 
   webui2:
-    image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:1.0.1-slim-amd64
+    image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:latest-amd64
     container_name: webui2
     environment:
       START_ARGS: "--no-half-vae --upcast-sampling --opt-split-attention --enable-html-footer"
@@ -77,7 +76,7 @@ services:
               capabilities: [ gpu ]
 
   webui3:
-    image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:1.0.1-slim-amd64
+    image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:latest-amd64
     container_name: webui3
     environment:
       START_ARGS: "--no-half-vae --upcast-sampling --opt-split-attention --enable-html-footer"
