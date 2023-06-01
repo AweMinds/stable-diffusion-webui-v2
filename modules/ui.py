@@ -1776,7 +1776,7 @@ def create_ui():
         footer = shared.html("footer.html")
         languages = list(localization.localizations.keys())
         languages.sort()
-        footer = footer.format(versions=versions_html(), language_list=['None'] + languages, icp_license=icp_license_html())
+        footer = footer.format(versions="", language_list=['None'] + languages, icp_license=icp_license_html())
         gr.HTML(footer, elem_id="footer")
 
         text_settings = gr.Textbox(elem_id="settings_json", value=lambda: opts.dumpjson(), visible=False)
