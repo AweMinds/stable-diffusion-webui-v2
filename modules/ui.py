@@ -1775,7 +1775,7 @@ def create_ui():
         footer = shared.html("footer.html")
         languages = list(localization.localizations.keys())
         languages.sort()
-        footer = footer.format(versions=versions_html(), language_list=['None'] + languages)
+        footer = footer.format(versions=versions_html(), language_list=['None'] + languages, icp_license=icp_license_html())
         gr.HTML(footer, elem_id="footer")
 
         text_settings = gr.Textbox(elem_id="settings_json", value=lambda: opts.dumpjson(), visible=False)
@@ -2069,3 +2069,14 @@ commit: <a href="https://github.com/Graviti-AI/stable-diffusion-webui/commit/{co
  • 
 checkpoint: <a id="sd_checkpoint_hash">N/A</a>
 """
+
+
+def icp_license_html():
+    if not cmd_opts.enable_html_footer:
+        return ""
+
+    return f"""
+    <div class="icp_license">
+            ©2023 深圳奥茗智源科技有限公司 版权所有 <a href="https://beian.miit.gov.cn">粤ICP备2023060458号</a>
+    </div>
+    """
