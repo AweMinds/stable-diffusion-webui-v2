@@ -2010,7 +2010,7 @@ def header_html():
         head += f"""
         <header class="header">
             <img class="logo" src="/components/icons/logo_text.png" alt="AweMinds Logo">
-            <button class="button">注册/登录</button>
+            <button id="login_or_register_btn" class="button">注册/登录</button>
         </header>
         <hr class="header_separator">\n
         """
