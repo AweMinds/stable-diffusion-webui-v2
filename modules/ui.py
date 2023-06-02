@@ -2042,7 +2042,7 @@ def reload_javascript():
 
     def template_response(*args, **kwargs):
         js = javascript_html(args[1]['request'])
-        js += header_html()
+        # js += header_html()
         res = shared.GradioTemplateResponseOriginal(*args, **kwargs)
         res.body = res.body.replace(b'</head>', f'{js}</head>'.encode("utf8"))
         res.body = res.body.replace(b'</body>', f'{css}</body>'.encode("utf8"))
