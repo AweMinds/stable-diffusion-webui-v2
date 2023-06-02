@@ -51,6 +51,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           
   trigger-deploy-to-248:
+    needs: build_and_publish
     runs-on: ubuntu-latest
     outputs:
         CONTINUE_JOBS: ${{ steps.manual-trigger.outputs.CONTINUE_JOBS }}
@@ -63,7 +64,7 @@ jobs:
   
   deploying-248:
       needs: trigger-deploy-to-248
-      if: ${{ needs.manual-trigger-build.outputs.CONTINUE_JOBS == 'true' }}
+      if: ${{ needs.trigger-deploy-to-248.outputs.CONTINUE_JOBS == 'true' }}
       runs-on: ubuntu-latest
       steps:
         - name: Deploy to fantuyun 248
@@ -89,7 +90,7 @@ jobs:
   
   deploying-253:
       needs: trigger-deploy-to-253
-      if: ${{ needs.manual-trigger-build.outputs.CONTINUE_JOBS == 'true' }}
+      if: ${{ needs.trigger-deploy-to-253.outputs.CONTINUE_JOBS == 'true' }}
       runs-on: ubuntu-latest
       steps:
         - name: Deploy to fantuyun 253
