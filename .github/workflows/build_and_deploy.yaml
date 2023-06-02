@@ -49,7 +49,7 @@ jobs:
           file: ./Dockerfile_update
           #tags: ${{ steps.meta.outputs.tags }}
           tags: |
-              registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:latest
+              registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:latest-amd64
               registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:${{ steps.date.outputs.today }}
           labels: ${{ steps.meta.outputs.labels }}
     
