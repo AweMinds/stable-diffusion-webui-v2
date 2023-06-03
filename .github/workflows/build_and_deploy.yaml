@@ -45,7 +45,6 @@ jobs:
           push: true
           file: ./Dockerfile_update
           #tags: ${{ steps.meta.outputs.tags }}
-          no-cache: true
           tags: |
               registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:latest-amd64
               registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:${{ steps.date.outputs.today }}
