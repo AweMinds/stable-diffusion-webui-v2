@@ -1,3 +1,3 @@
-// 服务端地址
+// AWETODO: 服务端地址
 //阿里云测试环境:
-const aweApiUrl = 'http://47.100.10.24:8080';
+const aweApiUrl = 'https://aweminds.cn:8080';
