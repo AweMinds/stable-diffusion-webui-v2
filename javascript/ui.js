@@ -477,9 +477,9 @@ function restart_reload(){
 
 function redirect_to_payment(need_upgrade){
     // AWETODO: 先不跳转，后续实现credit不足跳转升级付费
-    if (need_upgrade) {
-        window.location.href = "/user?upgradeFlag=true";
-    }
+    // if (need_upgrade) {
+    //     window.location.href = "/user?upgradeFlag=true";
+    // }
 }
 
 // Simulate an `input` DOM event for Gradio Textbox component. Needed after you edit its contents in javascript, otherwise your edits

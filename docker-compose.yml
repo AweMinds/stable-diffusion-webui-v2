@@ -5,7 +5,7 @@ services:
     image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:latest-amd64
     container_name: webui0
     environment:
-      START_ARGS: "--no-half-vae --upcast-sampling --opt-split-attention --enable-html-footer"
+      START_ARGS: "--no-half-vae --upcast-sampling --opt-split-attention --enable-html-footer --system-monitor-addr https://aweminds.cn:8080/api/monitor --system-monitor-api-secret i7fJoi2leRvtcqVb3uLqw9Bv"
     ports:
       - "7860:7860"
     restart: on-failure
@@ -29,7 +29,7 @@ services:
     image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:latest-amd64
     container_name: webui1
     environment:
-      START_ARGS: "--no-half-vae --upcast-sampling --opt-split-attention --enable-html-footer"
+      START_ARGS: "--no-half-vae --upcast-sampling --opt-split-attention --enable-html-footer --system-monitor-addr https://aweminds.cn:8080/api/monitor --system-monitor-api-secret i7fJoi2leRvtcqVb3uLqw9Bv"
       UPDATE_CODE: 1
     ports:
       - "7861:7860"
@@ -54,7 +54,7 @@ services:
     image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:latest-amd64
     container_name: webui2
     environment:
-      START_ARGS: "--no-half-vae --upcast-sampling --opt-split-attention --enable-html-footer"
+      START_ARGS: "--no-half-vae --upcast-sampling --opt-split-attention --enable-html-footer --system-monitor-addr https://aweminds.cn:8080/api/monitor --system-monitor-api-secret i7fJoi2leRvtcqVb3uLqw9Bv"
       UPDATE_CODE: 1
     ports:
       - "7862:7860"
@@ -79,7 +79,7 @@ services:
     image: registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:latest-amd64
     container_name: webui3
     environment:
-      START_ARGS: "--no-half-vae --upcast-sampling --opt-split-attention --enable-html-footer"
+      START_ARGS: "--no-half-vae --upcast-sampling --opt-split-attention --enable-html-footer --system-monitor-addr https://aweminds.cn:8080/api/monitor --system-monitor-api-secret i7fJoi2leRvtcqVb3uLqw9Bv"
       UPDATE_CODE: 1
     ports:
       - "7863:7860"
