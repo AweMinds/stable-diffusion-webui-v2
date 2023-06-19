@@ -4,10 +4,7 @@ FROM registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:1.0-slim-amd64
 # 设置工作目录
 WORKDIR /app
 
-ARG CACHEBUST=1
-## 更新git
-RUN git checkout .
-RUN git pull --rebase
+COPY . .
 
 ## 暴露端口
 EXPOSE 7860 7861 7862 7863

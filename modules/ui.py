@@ -793,19 +793,19 @@ def create_ui():
                         init_img_inpaint = gr.Image(label="Image for img2img", show_label=False, source="upload", interactive=True, type="pil", elem_id="img_inpaint_base")
                         init_mask_inpaint = gr.Image(label="Mask", source="upload", interactive=True, type="pil", elem_id="img_inpaint_mask")
 
-                    with gr.TabItem('Batch', id='batch', elem_id="img2img_batch_tab") as tab_batch:
-                        hidden = '<br>Disabled when launched with --hide-ui-dir-config.' if shared.cmd_opts.hide_ui_dir_config else ''
-                        gr.HTML(
-                            f"<p style='padding-bottom: 1em;' class=\"text-gray-500\">Process images in a directory on the same machine where the server is running." +
-                            f"<br>Use an empty output directory to save pictures normally instead of writing to the output directory." +
-                            f"<br>Add inpaint batch mask directory to enable inpaint batch processing."
-                            f"{hidden}</p>"
-                        )
-                        img2img_batch_input_dir = gr.Textbox(label="Input directory", **shared.hide_dirs, elem_id="img2img_batch_input_dir", interactive=False)
-                        img2img_batch_output_dir = gr.Textbox(label="Output directory", **shared.hide_dirs, elem_id="img2img_batch_output_dir", interactive=False)
-                        img2img_batch_inpaint_mask_dir = gr.Textbox(label="Inpaint batch mask directory (required for inpaint batch processing only)", **shared.hide_dirs, elem_id="img2img_batch_inpaint_mask_dir", interactive=False)
+                    # with gr.TabItem('Batch', id='batch', elem_id="img2img_batch_tab") as tab_batch:
+                    #     hidden = '<br>Disabled when launched with --hide-ui-dir-config.' if shared.cmd_opts.hide_ui_dir_config else ''
+                    #     gr.HTML(
+                    #         f"<p style='padding-bottom: 1em;' class=\"text-gray-500\">Process images in a directory on the same machine where the server is running." +
+                    #         f"<br>Use an empty output directory to save pictures normally instead of writing to the output directory." +
+                    #         f"<br>Add inpaint batch mask directory to enable inpaint batch processing."
+                    #         f"{hidden}</p>"
+                    #     )
+                    #     img2img_batch_input_dir = gr.Textbox(label="Input directory", **shared.hide_dirs, elem_id="img2img_batch_input_dir", interactive=False)
+                    #     img2img_batch_output_dir = gr.Textbox(label="Output directory", **shared.hide_dirs, elem_id="img2img_batch_output_dir", interactive=False)
+                    #     img2img_batch_inpaint_mask_dir = gr.Textbox(label="Inpaint batch mask directory (required for inpaint batch processing only)", **shared.hide_dirs, elem_id="img2img_batch_inpaint_mask_dir", interactive=False)
 
-                    img2img_tabs = [tab_img2img, tab_sketch, tab_inpaint, tab_inpaint_color, tab_inpaint_upload, tab_batch]
+                    img2img_tabs = [tab_img2img, tab_sketch, tab_inpaint, tab_inpaint_color, tab_inpaint_upload]
                     img2img_image_inputs = [init_img, sketch, init_img_with_mask, inpaint_color_sketch]
 
                     for i, tab in enumerate(img2img_tabs):
@@ -1007,9 +1007,9 @@ def create_ui():
                     inpaint_full_res,
                     inpaint_full_res_padding,
                     inpainting_mask_invert,
-                    img2img_batch_input_dir,
-                    img2img_batch_output_dir,
-                    img2img_batch_inpaint_mask_dir,
+                    # img2img_batch_input_dir,
+                    # img2img_batch_output_dir,
+                    # img2img_batch_inpaint_mask_dir,
                     override_settings,
                 ] + custom_inputs + [img2img_model_title, img2img_vae_title],
                 outputs=[
@@ -1026,8 +1026,8 @@ def create_ui():
                 _js="get_img2img_tab_index",
                 inputs=[
                     dummy_component,
-                    img2img_batch_input_dir,
-                    img2img_batch_output_dir,
+                    # img2img_batch_input_dir,
+                    # img2img_batch_output_dir,
                     init_img,
                     sketch,
                     init_img_with_mask,
