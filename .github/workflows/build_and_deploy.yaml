@@ -40,8 +40,8 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          #cache-from: type=gha
-          #cache-to: type=gha,mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           push: true
           file: ./Dockerfile_update
           #tags: ${{ steps.meta.outputs.tags }}
