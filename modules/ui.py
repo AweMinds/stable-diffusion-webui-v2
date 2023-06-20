@@ -493,6 +493,21 @@ def create_ui():
     # WEBUILOGIC: txt2img脚本初始化
     modules.scripts.scripts_txt2img.initialize_scripts(is_img2img=False)
 
+    def on_width_or_height_change(width, height, batch_size):
+        if width * height > 1024 * 1024:
+            return gr.Slider.update(minimum=1, maximum=1, value=1)
+        return gr.Slider.update(minimum=1, maximum=4, value=batch_size)
+
+    def on_tab_scale_to_select(width, height, batch_size):
+        print("----------")
+        print(width)
+        print(height)
+        print(batch_size)
+        return on_width_or_height_change(width, height, batch_size)
+
+    def on_tab_scale_by_select(batch_size):
+        return gr.Slider.update(minimum=1, maximum=4, value=batch_size)
+
     with gr.Blocks(analytics_enabled=False) as txt2img_interface:
         txt2img_prompt, txt2img_prompt_styles, txt2img_negative_prompt, submit, _, _, txt2img_prompt_style_apply, txt2img_save_style, txt2img_paste, extra_networks_button, token_counter, token_button, negative_token_counter, negative_token_button, restore_progress_button, txt2img_model_title, txt2img_vae_title = create_toprow(is_img2img=False)
         # WEBUILOGIC: need_upgrade 勾选框
@@ -525,6 +540,8 @@ def create_ui():
                                 with gr.Column(elem_id="txt2img_column_batch"):
                                     batch_count = gr.Slider(minimum=1, maximum=4, step=1, label='Batch count', value=1, elem_id="txt2img_batch_count")
                                     batch_size = gr.Slider(minimum=1, maximum=4, step=1, label='Batch size', value=1, elem_id="txt2img_batch_size")
+                                    width.change(fn=on_width_or_height_change, inputs=[width, height, batch_size], outputs=batch_size)
+                                    height.change(fn=on_width_or_height_change, inputs=[width, height, batch_size], outputs=batch_size)
 
                     elif category == "cfg":
                         cfg_scale = gr.Slider(minimum=1.0, maximum=30.0, step=0.5, label='CFG Scale', value=7.0, elem_id="txt2img_cfg_scale")
@@ -882,7 +899,11 @@ def create_ui():
                             if opts.dimensions_and_batch_together:
                                 with gr.Column(elem_id="img2img_column_batch"):
                                     batch_count = gr.Slider(minimum=1, maximum=4, step=1, label='Batch count', value=1, elem_id="img2img_batch_count")
-                                    batch_size = gr.Slider(minimum=1, maximum=4, step=1, label='Batch size', value=1, elem_id="img2img_batch_size")
+                                    batch_size = gr.Slider(minimum=1, maximum=4, step=1, label='Batch size111111', value=1, elem_id="img2img_batch_size")
+                                    width.change(fn=on_width_or_height_change, inputs=[width, height, batch_size], outputs=batch_size)
+                                    height.change(fn=on_width_or_height_change, inputs=[width, height, batch_size], outputs=batch_size)
+                                    tab_scale_to.select(fn=on_tab_scale_to_select, inputs=[width, height, batch_size], outputs=batch_size)
+                                    tab_scale_by.select(fn=on_tab_scale_by_select, inputs=[batch_size], outputs=batch_size)
 
                     elif category == "cfg":
                         with FormGroup():
