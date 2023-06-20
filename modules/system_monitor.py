@@ -210,8 +210,8 @@ def on_task(request: gr.Request, func, task_info, *args, **kwargs):
     raise MonitorException(resp.status_code, resp.text)
 
 
-def on_task_finished(request: gr.Request, monitor_log_id: str, status: str, message: str, time_consumption: dict):
-    monitor_addr = modules.shared.cmd_opts.system_monitor_addr
+async def on_task_finished(request: gr.Request, monitor_log_id: str, status: str, message: str, time_consumption: dict):
+    monitor_addr = await modules.shared.cmd_opts.system_monitor_addr
     system_monitor_api_secret = modules.shared.cmd_opts.system_monitor_api_secret
     if not monitor_addr or not system_monitor_api_secret:
         logger.error('system_monitor_addr or system_monitor_api_secret is not present')
