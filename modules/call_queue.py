@@ -110,6 +110,7 @@ def wrap_gradio_gpu_call(func, func_name: str = '', extra_outputs=None, add_moni
                 extra_outputs_array = [None, '', '']
             if add_monitor_state:
                 # 如果status code ==413，说明Prompt长度超过限制
+                #AWETODO: monitor的错误处理
                 if 399 < e.status_code < 500:
                     print("---------MonitorException------")
                     print(e.__str__())
