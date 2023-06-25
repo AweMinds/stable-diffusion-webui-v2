@@ -286,6 +286,24 @@ class StableDiffusionProcessing:
     def close(self):
         self.sampler = None
 
+    def setup_prompts(self):
+        if type(self.prompt) == list:
+            self.all_prompts = self.prompt
+        else:
+            self.all_prompts = self.batch_size * self.n_iter * [self.prompt]
+
+        if type(self.negative_prompt) == list:
+            self.all_negative_prompts = self.negative_prompt
+        else:
+            self.all_negative_prompts = self.batch_size * self.n_iter * [self.negative_prompt]
+
+        if not self.global_prompt_styles():
+            self.all_prompts = [shared.prompt_styles().apply_styles_to_prompt(x, self.styles) for x in self.all_prompts]
+            self.all_negative_prompts = [shared.prompt_styles().apply_negative_styles_to_prompt(x, self.styles) for x in self.all_negative_prompts]
+        else:
+            self.all_prompts = [self.global_prompt_styles().apply_styles_to_prompt(x, self.styles) for x in self.all_prompts]
+            self.all_negative_prompts = [self.global_prompt_styles().apply_negative_styles_to_prompt(x, self.styles) for x in self.all_negative_prompts]
+
 
 class Processed:
     def __init__(self, p: StableDiffusionProcessing, images_list, seed=-1, info="", subseed=None, all_prompts=None, all_negative_prompts=None, all_seeds=None, all_subseeds=None, index_of_first_image=0, infotexts=None, comments=""):
@@ -557,15 +575,7 @@ def process_images_inner(p: StableDiffusionProcessing) -> Processed:
 
     comments = {}
 
-    if type(p.prompt) == list:
-        p.all_prompts = [p.global_prompt_styles().apply_styles_to_prompt(x, p.styles) for x in p.prompt]
-    else:
-        p.all_prompts = p.batch_size * p.n_iter * [p.global_prompt_styles().apply_styles_to_prompt(p.prompt, p.styles)]
-
-    if type(p.negative_prompt) == list:
-        p.all_negative_prompts = [p.global_prompt_styles().apply_negative_styles_to_prompt(x, p.styles) for x in p.negative_prompt]
-    else:
-        p.all_negative_prompts = p.batch_size * p.n_iter * [p.global_prompt_styles().apply_negative_styles_to_prompt(p.negative_prompt, p.styles)]
+    p.setup_prompts()
 
     if type(seed) == list:
         p.all_seeds = seed

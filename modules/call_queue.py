@@ -38,6 +38,9 @@ def submit_to_gpu_worker(func: callable, timeout: int = 60) -> callable:
 
 
 def wrap_gpu_call(request: gradio.routes.Request, func, func_name, id_task, *args, **kwargs):
+    if not func_name:
+        func_name = func.__name__
+
     monitor_log_id = None
     status = ''
     log_message = ''
@@ -61,7 +64,12 @@ def wrap_gpu_call(request: gradio.routes.Request, func, func_name, id_task, *arg
         # do gpu task
         progress.set_current_task_step('inference')
         # WEBUILOGIC: 开始出来图片生成（1）
-        res = func(request, *args, **kwargs)
+
+        if func_name == "run_deforum":
+            res = func(*args, **kwargs)
+        else:
+            res = func(request, *args, **kwargs)
+
         timer.record('inference')
 
         # all done, clear status and log res
