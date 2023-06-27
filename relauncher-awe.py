@@ -26,9 +26,7 @@ while True:
     if n > 0:
         logging.info(f'\tRelaunch count: {n}')
 
-    launch_string = f"./webui.sh -f --port {args.port} --device-id {args.device_id} --opt-sdp-attention --listen " \
-                    f"--logging-file-dir ./logs --logging-level DEBUG " \
-                    f"--theme dark --opt-channelslast"
+    launch_string = f"./webui.sh -f --port {args.port} --device-id {args.device_id}"
 
     if not SYSTEM_MONITOR_ADDR:
         pass
