@@ -899,7 +899,7 @@ def create_ui():
                             if opts.dimensions_and_batch_together:
                                 with gr.Column(elem_id="img2img_column_batch"):
                                     batch_count = gr.Slider(minimum=1, maximum=4, step=1, label='Batch count', value=1, elem_id="img2img_batch_count")
-                                    batch_size = gr.Slider(minimum=1, maximum=4, step=1, label='Batch size111111', value=1, elem_id="img2img_batch_size")
+                                    batch_size = gr.Slider(minimum=1, maximum=4, step=1, label='Batch size', value=1, elem_id="img2img_batch_size")
                                     width.change(fn=on_width_or_height_change, inputs=[width, height, batch_size], outputs=batch_size)
                                     height.change(fn=on_width_or_height_change, inputs=[width, height, batch_size], outputs=batch_size)
                                     tab_scale_to.select(fn=on_tab_scale_to_select, inputs=[width, height, batch_size], outputs=batch_size)
