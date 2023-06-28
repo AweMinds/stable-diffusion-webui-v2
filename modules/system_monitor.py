@@ -148,6 +148,8 @@ def _extract_task_id(*args):
 
 
 def on_task(request: gr.Request, func, task_info, *args, **kwargs):
+    print(f"---------task:{_extract_task_id(*args)} started------------")
+
     monitor_addr = modules.shared.cmd_opts.system_monitor_addr
     system_monitor_api_secret = modules.shared.cmd_opts.system_monitor_api_secret
     # AWETODO：实现system monitor, 启动的时候带上服务器地址和secret
@@ -210,8 +212,10 @@ def on_task(request: gr.Request, func, task_info, *args, **kwargs):
     raise MonitorException(resp.status_code, resp.text)
 
 
-async def on_task_finished(request: gr.Request, monitor_log_id: str, status: str, message: str, time_consumption: dict):
-    monitor_addr = await modules.shared.cmd_opts.system_monitor_addr
+def on_task_finished(request: gr.Request, monitor_log_id: str, status: str, message: str, time_consumption: dict):
+    print(f"---------task:{monitor_log_id} finished------------")
+
+    monitor_addr = modules.shared.cmd_opts.system_monitor_addr
     system_monitor_api_secret = modules.shared.cmd_opts.system_monitor_api_secret
     if not monitor_addr or not system_monitor_api_secret:
         logger.error('system_monitor_addr or system_monitor_api_secret is not present')

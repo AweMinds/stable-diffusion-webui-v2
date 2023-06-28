@@ -1,4 +1,3 @@
-import asyncio
 import html
 import logging
 import sys
@@ -89,7 +88,7 @@ def wrap_gpu_call(request: gradio.routes.Request, func, func_name, id_task, *arg
         shared.state.end()
         if monitor_log_id:
             try:
-                asyncio.run(modules.system_monitor.on_task_finished(request, monitor_log_id, status, log_message, time_consumption))
+                modules.system_monitor.on_task_finished(request, monitor_log_id, status, log_message, time_consumption)
             except Exception as e:
                 logging.warning(f'send task finished event to monitor failed: {e.__str__()}')
     return res
