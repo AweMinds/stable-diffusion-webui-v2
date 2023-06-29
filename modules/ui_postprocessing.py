@@ -14,8 +14,8 @@ def create_ui():
                 with gr.TabItem('Single Image', id="single_image", elem_id="extras_single_tab") as tab_single:
                     extras_image = gr.Image(label="Source", source="upload", interactive=True, type="pil", elem_id="extras_image")
 
-                with gr.TabItem('Batch Process', id="batch_process", elem_id="extras_batch_process_tab") as tab_batch:
-                    image_batch = gr.Files(label="Batch Process", interactive=True, elem_id="extras_image_batch")
+                # with gr.TabItem('Batch Process', id="batch_process", elem_id="extras_batch_process_tab") as tab_batch:
+                #     image_batch = gr.Files(label="Batch Process", interactive=True, elem_id="extras_image_batch")
 
                 # with gr.TabItem('Batch from Directory', id="batch_from_directory", elem_id="extras_batch_directory_tab") as tab_batch_dir:
                 #     extras_batch_input_dir = gr.Textbox(label="Input directory", **shared.hide_dirs, placeholder="A directory on the same machine where the server is running.", elem_id="extras_batch_input_dir")
@@ -32,7 +32,7 @@ def create_ui():
             result_images, html_info_x, html_info, html_log = ui_common.create_output_panel("extras", Paths(None).outdir_extras_samples())
 
     tab_single.select(fn=lambda: 0, inputs=[], outputs=[tab_index])
-    tab_batch.select(fn=lambda: 1, inputs=[], outputs=[tab_index])
+    # tab_batch.select(fn=lambda: 1, inputs=[], outputs=[tab_index])
     # tab_batch_dir.select(fn=lambda: 2, inputs=[], outputs=[tab_index])
 
     submit.click(
@@ -41,7 +41,7 @@ def create_ui():
             dummy_component,
             tab_index,
             extras_image,
-            image_batch,
+            # image_batch,
             # extras_batch_input_dir,
             # extras_batch_output_dir,
             # show_extras_results,

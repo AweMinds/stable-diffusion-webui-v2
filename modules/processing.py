@@ -604,6 +604,7 @@ def create_infotext(p, all_prompts, all_seeds, all_subseeds, comments=None, iter
     return f"{all_prompts[index]}{negative_prompt_text}\n{generation_params_text}".strip()
 
 
+# WEBUILOGIC: process_images，图片出来流程（4）
 def process_images(p: StableDiffusionProcessing) -> Processed:
     # Run preprocess before everything else
     if p.scripts is not None:
@@ -649,7 +650,7 @@ def process_images(p: StableDiffusionProcessing) -> Processed:
 
     return res
 
-
+# WEBUILOGIC：process_images_inner, 图片处理的详细逻辑（5）
 def process_images_inner(p: StableDiffusionProcessing) -> Processed:
     """this is the main loop that both txt2img and img2img use; it calls func_init once inside all the scopes and func_sample once per batch"""
 

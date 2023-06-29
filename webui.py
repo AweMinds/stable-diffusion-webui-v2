@@ -530,6 +530,10 @@ def webui(server_port: int = 0):
         if cmd_opts.disable_auto_restart:
             break
 
+        # disable auto restart
+        if cmd_opts.disable_auto_restart:
+            break
+
 
 if __name__ == "__main__":
     if cmd_opts.nowebui:

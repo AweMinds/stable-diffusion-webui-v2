@@ -43,3 +43,4 @@ cache.json.lock
 localizations/*.json
 *.log
 data
+.DS_Store

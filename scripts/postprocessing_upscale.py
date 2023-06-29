@@ -32,6 +32,15 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
                                 upscaling_res_switch_btn = ToolButton(value=switch_values_symbol, elem_id="upscaling_res_switch_btn")
                                 upscaling_crop = gr.Checkbox(label='Crop to fit', value=True, elem_id="extras_upscaling_crop")
 
+                selectors = [upscaling_resize, upscaling_resize_w, upscaling_resize_h]
+                for selector in selectors:
+                    selector.change(
+                        fn=None,
+                        inputs=[upscaling_resize_w, upscaling_resize_h, upscaling_resize],
+                        outputs=[],
+                        _js="updateGenerateBtn_extras"
+                    )
+
             with FormRow():
                 extras_upscaler_1 = gr.Dropdown(label='Upscaler 1', elem_id="extras_upscaler_1", choices=[x.name for x in shared.sd_upscalers], value=shared.sd_upscalers[0].name)
 

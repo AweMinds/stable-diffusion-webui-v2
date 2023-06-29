@@ -2,6 +2,7 @@ import os.path
 import urllib.parse
 from pathlib import Path
 from PIL import PngImagePlugin
+import time
 
 from copy import deepcopy
 from modules import shared

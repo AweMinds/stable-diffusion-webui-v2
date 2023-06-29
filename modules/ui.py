@@ -489,6 +489,7 @@ def create_override_settings_dropdown(tabname, row):
     return dropdown
 
 
+# AWETODO: 创建UI入口
 def create_ui():
     import modules.img2img
     import modules.txt2img
@@ -498,10 +499,27 @@ def create_ui():
     parameters_copypaste.reset()
 
     modules.scripts.scripts_current = modules.scripts.scripts_txt2img
+    # WEBUILOGIC: txt2img脚本初始化
     modules.scripts.scripts_txt2img.initialize_scripts(is_img2img=False)
+
+    def on_width_or_height_change(width, height, batch_size):
+        if width * height > 1024 * 1024:
+            return gr.Slider.update(minimum=1, maximum=1, value=1)
+        return gr.Slider.update(minimum=1, maximum=4, value=batch_size)
+
+    def on_tab_scale_to_select(width, height, batch_size):
+        print("----------")
+        print(width)
+        print(height)
+        print(batch_size)
+        return on_width_or_height_change(width, height, batch_size)
+
+    def on_tab_scale_by_select(batch_size):
+        return gr.Slider.update(minimum=1, maximum=4, value=batch_size)
 
     with gr.Blocks(analytics_enabled=False) as txt2img_interface:
         txt2img_prompt, txt2img_prompt_styles, txt2img_negative_prompt, submit, _, _, txt2img_prompt_style_apply, txt2img_save_style, txt2img_paste, extra_networks_button, token_counter, token_button, negative_token_counter, negative_token_button, restore_progress_button, txt2img_model_title, txt2img_vae_title = create_toprow(is_img2img=False)
+        # WEBUILOGIC: need_upgrade 勾选框
         need_upgrade = gr.Checkbox(
             value=False, interactive=False, visible=False, elem_classes="upgrade_checkbox")
 
@@ -531,6 +549,8 @@ def create_ui():
                                 with gr.Column(elem_id="txt2img_column_batch"):
                                     batch_count = gr.Slider(minimum=1, maximum=4, step=1, label='Batch count', value=1, elem_id="txt2img_batch_count")
                                     batch_size = gr.Slider(minimum=1, maximum=4, step=1, label='Batch size', value=1, elem_id="txt2img_batch_size")
+                                    width.change(fn=on_width_or_height_change, inputs=[width, height, batch_size], outputs=batch_size)
+                                    height.change(fn=on_width_or_height_change, inputs=[width, height, batch_size], outputs=batch_size)
 
                     elif category == "cfg":
                         cfg_scale = gr.Slider(minimum=1.0, maximum=30.0, step=0.5, label='CFG Scale', value=7.0, elem_id="txt2img_cfg_scale")
@@ -754,6 +774,7 @@ def create_ui():
             ui_extra_networks.setup_ui(extra_networks_ui, txt2img_gallery)
 
     modules.scripts.scripts_current = modules.scripts.scripts_img2img
+    # WEBUILOGIC: img2img脚本初始化
     modules.scripts.scripts_img2img.initialize_scripts(is_img2img=True)
 
     with gr.Blocks(analytics_enabled=False) as img2img_interface:
@@ -818,19 +839,19 @@ def create_ui():
                         init_img_inpaint = gr.Image(label="Image for img2img", show_label=False, source="upload", interactive=True, type="pil", elem_id="img_inpaint_base")
                         init_mask_inpaint = gr.Image(label="Mask", source="upload", interactive=True, type="pil", elem_id="img_inpaint_mask")
 
-                    with gr.TabItem('Batch', id='batch', elem_id="img2img_batch_tab") as tab_batch:
-                        hidden = '<br>Disabled when launched with --hide-ui-dir-config.' if shared.cmd_opts.hide_ui_dir_config else ''
-                        gr.HTML(
-                            "<p style='padding-bottom: 1em;' class=\"text-gray-500\">Process images in a directory on the same machine where the server is running." +
-                            "<br>Use an empty output directory to save pictures normally instead of writing to the output directory." +
-                            f"<br>Add inpaint batch mask directory to enable inpaint batch processing."
-                            f"{hidden}</p>"
-                        )
-                        img2img_batch_input_dir = gr.Textbox(label="Input directory", **shared.hide_dirs, elem_id="img2img_batch_input_dir", interactive=False)
-                        img2img_batch_output_dir = gr.Textbox(label="Output directory", **shared.hide_dirs, elem_id="img2img_batch_output_dir", interactive=False)
-                        img2img_batch_inpaint_mask_dir = gr.Textbox(label="Inpaint batch mask directory (required for inpaint batch processing only)", **shared.hide_dirs, elem_id="img2img_batch_inpaint_mask_dir", interactive=False)
+                    # with gr.TabItem('Batch', id='batch', elem_id="img2img_batch_tab") as tab_batch:
+                    #     hidden = '<br>Disabled when launched with --hide-ui-dir-config.' if shared.cmd_opts.hide_ui_dir_config else ''
+                    #     gr.HTML(
+                    #         f"<p style='padding-bottom: 1em;' class=\"text-gray-500\">Process images in a directory on the same machine where the server is running." +
+                    #         f"<br>Use an empty output directory to save pictures normally instead of writing to the output directory." +
+                    #         f"<br>Add inpaint batch mask directory to enable inpaint batch processing."
+                    #         f"{hidden}</p>"
+                    #     )
+                    #     img2img_batch_input_dir = gr.Textbox(label="Input directory", **shared.hide_dirs, elem_id="img2img_batch_input_dir", interactive=False)
+                    #     img2img_batch_output_dir = gr.Textbox(label="Output directory", **shared.hide_dirs, elem_id="img2img_batch_output_dir", interactive=False)
+                    #     img2img_batch_inpaint_mask_dir = gr.Textbox(label="Inpaint batch mask directory (required for inpaint batch processing only)", **shared.hide_dirs, elem_id="img2img_batch_inpaint_mask_dir", interactive=False)
 
-                    img2img_tabs = [tab_img2img, tab_sketch, tab_inpaint, tab_inpaint_color, tab_inpaint_upload, tab_batch]
+                    img2img_tabs = [tab_img2img, tab_sketch, tab_inpaint, tab_inpaint_color, tab_inpaint_upload]
 
                     for i, tab in enumerate(img2img_tabs):
                         tab.select(fn=lambda tabnum=i: tabnum, inputs=[], outputs=[img2img_selected_tab])
@@ -908,6 +929,10 @@ def create_ui():
                                 with gr.Column(elem_id="img2img_column_batch"):
                                     batch_count = gr.Slider(minimum=1, maximum=4, step=1, label='Batch count', value=1, elem_id="img2img_batch_count")
                                     batch_size = gr.Slider(minimum=1, maximum=4, step=1, label='Batch size', value=1, elem_id="img2img_batch_size")
+                                    width.change(fn=on_width_or_height_change, inputs=[width, height, batch_size], outputs=batch_size)
+                                    height.change(fn=on_width_or_height_change, inputs=[width, height, batch_size], outputs=batch_size)
+                                    tab_scale_to.select(fn=on_tab_scale_to_select, inputs=[width, height, batch_size], outputs=batch_size)
+                                    tab_scale_by.select(fn=on_tab_scale_by_select, inputs=[batch_size], outputs=batch_size)
 
                     elif category == "cfg":
                         with FormGroup():
@@ -972,6 +997,7 @@ def create_ui():
             connect_reuse_seed(seed, reuse_seed, generation_info, dummy_component, is_subseed=False)
             connect_reuse_seed(subseed, reuse_subseed, generation_info, dummy_component, is_subseed=True)
 
+            # AWETODO: img2img参数变化的响应事件
             selectors = [batch_count, width, height, batch_size, steps]
             for selector in selectors:
                 selector.change(
@@ -1031,9 +1057,9 @@ def create_ui():
                     inpaint_full_res,
                     inpaint_full_res_padding,
                     inpainting_mask_invert,
-                    img2img_batch_input_dir,
-                    img2img_batch_output_dir,
-                    img2img_batch_inpaint_mask_dir,
+                    # img2img_batch_input_dir,
+                    # img2img_batch_output_dir,
+                    # img2img_batch_inpaint_mask_dir,
                     override_settings,
                 ] + custom_inputs + [img2img_model_title, img2img_vae_title],
                 outputs=[
@@ -1050,8 +1076,8 @@ def create_ui():
                 _js="get_img2img_tab_index",
                 inputs=[
                     dummy_component,
-                    img2img_batch_input_dir,
-                    img2img_batch_output_dir,
+                    # img2img_batch_input_dir,
+                    # img2img_batch_output_dir,
                     init_img,
                     sketch,
                     init_img_with_mask,
@@ -1776,22 +1802,22 @@ def create_ui():
     for _interface, label, _ifid in interfaces:
         shared.tab_names.append(label)
 
-    with gr.Blocks(theme=shared.gradio_theme, analytics_enabled=False, title="GRAVITI Diffus") as demo:
-        with gr.Row():
-             with gr.Column(elem_id="user-setting", min_width=500, scale=2):
-                gr.HTML(
-                    value="<div class='user-content'>"
-                            "<div class='right-content'>"
-                            "<div id='discord' class='discord-icon'><a title='Join Discord' href='https://discord.gg/QfBbBYqQ7z'><img src='/public/image/discord.png' /></a></div>"
-                            "<div id='sign' title='' class='upgrade-content' style='display: none'><a><img /><span></span></a></div>"
-                            "<div id='package' title='Credits Package' class='upgrade-content' style='display: none'><a><img src='/public/image/package.png' /><span></span></a></div>"
-                            "<div id='upgrade' title='Unlock more credits' class='upgrade-content' style='display: none'><a href='/user#/subscription?type=subscription'><img src='/public/image/lightning.png'/><span>Upgrade</span></a></div>"
-                            "</div>"
-                            "<div style='display: none;justify-content: flex-end;' class='user_info'><a href='/user'><img "
-                            "src=''"
-                            "/></a><div class='user_info-name'><span></span><a "
-                            "href='/api/logout' target='_self'>Log out</a></div></div></div>",
-                    show_label=False)
+    with gr.Blocks(theme=shared.gradio_theme, analytics_enabled=False, title="AweMinds") as demo:
+        # with gr.Row():
+        #      with gr.Column(elem_id="user-setting", min_width=500, scale=2):
+        #         gr.HTML(
+        #             value="<div class='user-content'>"
+        #                     "<div class='right-content'>"
+        #                     "<div id='discord' class='discord-icon'><a title='Join Discord' href='https://discord.gg/QfBbBYqQ7z'><img src='/public/image/discord.png' /></a></div>"
+        #                     "<div id='sign' title='' class='upgrade-content' style='display: none'><a><img /><span></span></a></div>"
+        #                     "<div id='package' title='Credits Package' class='upgrade-content' style='display: none'><a><img src='/public/image/package.png' /><span></span></a></div>"
+        #                     "<div id='upgrade' title='Unlock more credits' class='upgrade-content' style='display: none'><a href='/user#/subscription?type=subscription'><img src='/public/image/lightning.png'/><span>Upgrade</span></a></div>"
+        #                     "</div>"
+        #                     "<div style='display: none;justify-content: flex-end;' class='user_info'><a href='/user'><img "
+        #                     "src=''"
+        #                     "/></a><div class='user_info-name'><span></span><a "
+        #                     "href='/api/logout' target='_self'>Log out</a></div></div></div>",
+        #             show_label=False)
         with gr.Row(elem_id="topbar"):
             with gr.Column(scale=6, min_width=850):
                 with gr.Row(elem_id="quicksettings"):
@@ -1896,7 +1922,7 @@ def create_ui():
         footer = shared.html("footer.html")
         languages = list(localization.localizations.keys())
         languages.sort()
-        footer = footer.format(versions=versions_html(), language_list=['None'] + languages)
+        footer = footer.format(versions="", language_list=['None'] + languages, icp_license=icp_license_html())
         gr.HTML(footer, elem_id="footer")
 
         text_settings = gr.Textbox(elem_id="settings_json", value=lambda: opts.dumpjson(), visible=False)
@@ -2057,6 +2083,18 @@ def javascript_html(request: gr.Request):
     return head
 
 
+def header_html():
+    head = ""
+    if cmd_opts.enable_html_footer is True:
+        head += f"""
+        <header class="header">
+            <img class="logo" src="/components/icons/logo_text.png" alt="AweMinds Logo">
+            <button id="login_or_register_btn" class="button">注册/登录</button>
+        </header>
+        <hr class="header_separator">\n
+        """
+    return head
+
 def css_html():
     head = ""
 
@@ -2147,3 +2185,14 @@ def setup_ui_api(app):
     app.add_api_route("/internal/quicksettings-hint", quicksettings_hint, methods=["GET"], response_model=List[QuicksettingsHint])
 
     app.add_api_route("/internal/ping", lambda: {}, methods=["GET"])
+
+
+def icp_license_html():
+    if not cmd_opts.enable_html_footer:
+        return ""
+
+    return f"""
+    <div class="icp_license">
+            ©2023 深圳奥茗智源科技有限公司 版权所有 <a href="https://beian.miit.gov.cn">粤ICP备2023060458号</a>
+    </div>
+    """

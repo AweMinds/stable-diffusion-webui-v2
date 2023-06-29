@@ -5,6 +5,7 @@ from modules.paths_internal import models_path, script_path, data_path, extensio
 
 parser = argparse.ArgumentParser()
 
+# AWETODO: 命令行参数在这里定义
 parser.add_argument("-f", action='store_true', help=argparse.SUPPRESS)  # allows running as root; implemented outside of webui
 parser.add_argument("--update-all-extensions", action='store_true', help="launch.py argument: download updates for all extensions when starting the program")
 parser.add_argument("--skip-python-version-check", action='store_true', help="launch.py argument: do not check python version")
@@ -118,3 +119,4 @@ parser.add_argument("--logging-level", type=str,  help="logging level, can be on
 parser.add_argument("--model-cache-dir", type=str,  help="User can use a ssd to cache the models to speed up loading speed", default="")
 parser.add_argument("--model-cache-max-size", type=int,  help="The maximum disk space (GB) to use to cache the model. Need to set --model-cache-dir first.", default=0)
 parser.add_argument("--predict-timeout", type=int,  help="Timeout in second of /predict.", default=1800)
+parser.add_argument("--enable-html-footer", action='store_true', help="Add custom html header and footer to webui", default=False)

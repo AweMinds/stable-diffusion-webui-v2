@@ -150,6 +150,7 @@ function showRestoreProgressButton(tabname, show) {
 }
 
 function submit() {
+    //AWETODO: 点击生成之后的响应函数，待研究
     showSubmitButtons('txt2img', false);
 
     var id = randomId();
@@ -305,6 +306,88 @@ function updateGenerateBtn_img2img(width = 512, height = 512, batch_count = 1, b
     debounceCalcute['img2img_generate'](width, height, batch_count, batch_size, steps, 'img2img_generate');
 }
 
+function debounceCalcuteTimes(func, type, wait=1000,immediate) {
+    let timer = {};
+    timer[type] = null;
+    return function () {
+        let context = this;
+        let args = arguments;
+        if (timer[type]) clearTimeout(timer[type]);
+        if (immediate) {
+            const callNow = !timer;
+            timer[type] = setTimeout(() => {
+                timer = null;
+            }, wait)
+            if (callNow) func.apply(context, args)
+        } else {
+            timer[type] = setTimeout(function(){
+                func.apply(context, args)
+            }, wait);
+        }
+    }
+}
+
+const debounceCalcute = {
+    'txt2img_generate': debounceCalcuteTimes(calcuCreditTimes, 'txt2img_generate'),
+    'img2img_generate': debounceCalcuteTimes(calcuCreditTimes, 'img2img_generate'),
+    'extras_generate': debounceCalcuteTimes(calcuCreditTimes, 'extras_generate'),
+};
+
+
+async function calcuCreditTimes(width, height, batch_count, batch_size, steps, buttonId, hr_scale = 1) {
+    try {
+        //AWETODO: 实现calculateConsume接口，生成图片所需的credit
+        let task_type = buttonId.split("_")[0]
+
+        const response = await fetch(`${aweApiUrl}/api/calculateConsume`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                type: task_type,
+                image_sizes: [
+                    {
+                        width,
+                        height
+                    }
+                ],
+                batch_count,
+                batch_size,
+                steps,
+                scale: hr_scale
+            })
+        });
+        const { inference } = await response.json();
+        const buttonEle = gradioApp().querySelector(`#${buttonId}`);
+        if (inference === 9999) {
+            buttonEle.innerHTML = `Generate <span>&nbsp;( 图像过大，请调整 )</span> `;
+        } else {
+            buttonEle.innerHTML = `Generate <span>&nbsp;(消耗 ${inference} ${inference === 1 ? '积分)' : '积分)'}</span> `;
+        }
+    } catch(e) {
+        console.log(e);
+    }
+    
+}
+
+function updateGenerateBtn_txt2img(width = 512, height = 512, batch_count = 1, batch_size = 1, steps = 20, hr_scale = 1, enable_hr) {
+    if (enable_hr) {
+        debounceCalcute['txt2img_generate'](width, height, batch_count, batch_size, steps, 'txt2img_generate', hr_scale);
+    } else {
+        debounceCalcute['txt2img_generate'](width, height, batch_count, batch_size, steps, 'txt2img_generate');
+    }
+    
+}
+
+function updateGenerateBtn_img2img(width = 512, height = 512, batch_count = 1, batch_size = 1, steps = 20) {
+    debounceCalcute['img2img_generate'](width, height, batch_count, batch_size, steps, 'img2img_generate');
+}
+
+function updateGenerateBtn_extras(resize_width = 512, resize_height = 512, resize_scale = 1) {
+    debounceCalcute['extras_generate'](resize_width, resize_height, 0, 0, 0, 'extras_generate', resize_scale);
+}
 
 function ask_for_style_name(_, prompt_text, negative_prompt_text) {
     var name_ = prompt('Style name:');
@@ -477,6 +560,13 @@ function redirect_to_payment(need_upgrade){
     }
 }
 
+function redirect_to_payment(need_upgrade){
+    // AWETODO: 先不跳转，后续实现credit不足跳转升级付费
+    // if (need_upgrade) {
+    //     window.location.href = "/user?upgradeFlag=true";
+    // }
+}
+
 // Simulate an `input` DOM event for Gradio Textbox component. Needed after you edit its contents in javascript, otherwise your edits
 // will only visible on web page and not sent to python.
 function updateInput(target) {
@@ -593,7 +683,7 @@ async function browseModels(){
         
     }
 
-    
+
     if (img2img_tab.style.display == "block")
     {
         if (gradioApp().querySelector("div#img2img_extra_networks").classList.contains("hide"))
@@ -712,6 +802,7 @@ function imgExists(url, imgNode, name){
 // get user info
 onUiLoaded(function(){
     // update generate button text
+    //AWETODO: 更新Generate按钮信息
     updateGenerateBtn_txt2img();
     updateGenerateBtn_img2img();
 
@@ -719,14 +810,14 @@ onUiLoaded(function(){
 
     const {search} = location;
     const isDarkTheme = /theme=dark/g.test(search);
-    if (isDarkTheme) {
-        const rightContent = gradioApp().querySelector(".right-content");
-        const imgNodes = rightContent.querySelectorAll("a > img");
-        imgNodes.forEach(item => {
-            item.style.filter = 'invert(100%)';
-        })
-    }
-   
+    // if (isDarkTheme) {
+    //     const rightContent = gradioApp().querySelector(".right-content");
+    //     const imgNodes = rightContent.querySelectorAll("a > img");
+    //     imgNodes.forEach(item => {
+    //         item.style.filter = 'invert(100%)';
+    //     })
+    // }
+
 
     fetch(`/api/order_info`, {method: "GET", credentials: "include"}).then(res => {
         if (res && res.ok && !res.redirected) {

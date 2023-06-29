@@ -1,0 +1,13 @@
+# 基础镜像
+FROM registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:1.0-slim-amd64
+
+# 设置工作目录
+WORKDIR /app
+
+COPY . .
+
+## 暴露端口
+EXPOSE 7860 7861 7862 7863
+
+# 启动应用
+ENTRYPOINT ["/bin/sh", "-c", "./start_container.sh"]
