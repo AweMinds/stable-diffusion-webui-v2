@@ -1821,11 +1821,6 @@ def create_ui():
         with gr.Row(elem_id="topbar"):
             with gr.Column(scale=6, min_width=850):
                 with gr.Row(elem_id="quicksettings"):
-                    # Quicksetting is not used here, but keep it so the program will not throw any error
-                    for i, k, item in sorted(quicksettings_list, key=lambda x: quicksettings_names.get(x[1], x[0])):
-                        component = create_setting_component(k, is_quicksettings=True, visible=False, interactive=False)
-                        component_dict[k] = component
-
                     # This is the reall place to set sd checkpoint
                     sd_checkpoint_options = shared.opts.data_labels["sd_model_checkpoint"]
 
@@ -1852,6 +1847,18 @@ def create_ui():
                         sd_checkpoint_options.refresh,
                         sd_checkpoint_options.component_args,
                         "refresh_sd_model_checkpoint_dropdown")
+
+                    # AWETODO: Graviti版本不再使用config来设置quick setting，所以挪一下代码的位置，保证顺利保持与之前一直
+                    # Quicksetting is not used here, but keep it so the program will not throw any error
+                    for i, k, item in sorted(quicksettings_list, key=lambda x: quicksettings_names.get(x[1], x[0])):
+                        component = create_setting_component(k, is_quicksettings=True, visible=True, interactive=True)
+                        component_dict[k] = component
+
+                    # 将Browse Models加回来
+                    create_browse_model_button(
+                        'Browse Models',
+                        'browse_' + k,
+                        button_style="width: 200px !important; align-self: flex-end;")
 
                     def get_model_title_from_params(params):
                         if "Model hash" not in params and "Model" not in params:
