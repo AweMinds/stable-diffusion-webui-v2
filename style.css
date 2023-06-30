@@ -529,6 +529,7 @@ div#extras_scale_to_tab div.form{
 
 /* settings */
 #quicksettings {
+    width: fit-content;
     align-items: end;
 }
 

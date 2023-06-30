@@ -1883,16 +1883,17 @@ def create_ui():
                         inputs=sd_model_selection,
                         outputs=[txt2img_model_title, img2img_model_title]
                     )
-                    create_browse_model_button(
-                        'Show workspace models',
-                        'browse_models_in_workspace',
-                        button_style="width: 200px !important; flex-grow: 0.3 !important; align-self: flex-end;",
-                        js_function="browseWorkspaceModels")
-                    create_browse_model_button(
-                        'Browse All Models',
-                        'browse_all_models',
-                        button_style="width: 200px !important; flex-grow: 0.3 !important; align-self: flex-end;",
-                        js_function="openWorkSpaceDialog")
+
+                    # create_browse_model_button(
+                    #     'Show workspace models',
+                    #     'browse_models_in_workspace',
+                    #     button_style="width: 200px !important; flex-grow: 0.3 !important; align-self: flex-end;",
+                    #     js_function="browseWorkspaceModels")
+                    # create_browse_model_button(
+                    #     'Browse All Models',
+                    #     'browse_all_models',
+                    #     button_style="width: 200px !important; flex-grow: 0.3 !important; align-self: flex-end;",
+                    #     js_function="openWorkSpaceDialog")
 
         parameters_copypaste.connect_paste_params_buttons()
 
