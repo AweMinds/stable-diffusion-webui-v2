@@ -6,27 +6,29 @@ WORKDIR /app
 
 RUN apt update
 RUN apt install -y wget git python3 python3-venv python3-pip
+
+## 安装TCMalloc和ControlNet依赖
+RUN apt install -y libgl1-mesa-glx libglib2.0-0 google-perftools sox ffmpeg libcairo2 libcairo2-dev
+
+#文件操作
 RUN ln -s /usr/bin/python3 /usr/bin/python
+#RUN mv config_prd.json config.json
+#RUN mv cache_prd.json cache.json
 
-## 安装TCMalloc依赖
-RUN apt install -y libgl1-mesa-glx libglib2.0-0 google-perftools
-
-#安装ControlNet依赖
-RUN apt-get install -y sox ffmpeg libcairo2 libcairo2-dev
-
-#下载代码
+#clone代码
 RUN git clone -b aweminds https://github.com/AweMinds/stable-diffusion-webui.git .
 
 # 安装webUI依赖
-RUN ./webui_awe.sh -f --skip-torch-cuda-test
+RUN ./webui.sh -f --skip-torch-cuda-test --exit
 
-#文件操作
 RUN ln -s /app/venv/lib/python3.10/site-packages/torch/lib/libnvrtc-672ee683.so.11.2 /app/venv/lib/python3.10/site-packages/torch/lib/libnvrtc.so
-RUN mv config_prd.json config.json
-RUN mv cache_prd.json cache.json
+
+#更新代码
+COPY . .
+RUN ./webui.sh -f --skip-torch-cuda-test --exit
 
 ## 暴露端口
-EXPOSE 7860 7861 7862 7863
+EXPOSE 7860
 
 # 启动应用
 ENTRYPOINT ["/bin/sh", "-c", "./start_container.sh"]
