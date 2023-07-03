@@ -499,10 +499,6 @@ def create_ui():
         return gr.Slider.update(minimum=1, maximum=4, value=batch_size)
 
     def on_tab_scale_to_select(width, height, batch_size):
-        print("----------")
-        print(width)
-        print(height)
-        print(batch_size)
         return on_width_or_height_change(width, height, batch_size)
 
     def on_tab_scale_by_select(batch_size):
@@ -818,9 +814,9 @@ def create_ui():
                     #         f"<br>Add inpaint batch mask directory to enable inpaint batch processing."
                     #         f"{hidden}</p>"
                     #     )
-                    #     img2img_batch_input_dir = gr.Textbox(label="Input directory", **shared.hide_dirs, elem_id="img2img_batch_input_dir", interactive=False)
-                    #     img2img_batch_output_dir = gr.Textbox(label="Output directory", **shared.hide_dirs, elem_id="img2img_batch_output_dir", interactive=False)
-                    #     img2img_batch_inpaint_mask_dir = gr.Textbox(label="Inpaint batch mask directory (required for inpaint batch processing only)", **shared.hide_dirs, elem_id="img2img_batch_inpaint_mask_dir", interactive=False)
+                        img2img_batch_input_dir = gr.Textbox(label="Input directory", **shared.hide_dirs, elem_id="img2img_batch_input_dir", interactive=False)
+                        img2img_batch_output_dir = gr.Textbox(label="Output directory", **shared.hide_dirs, elem_id="img2img_batch_output_dir", interactive=False)
+                        img2img_batch_inpaint_mask_dir = gr.Textbox(label="Inpaint batch mask directory (required for inpaint batch processing only)", **shared.hide_dirs, elem_id="img2img_batch_inpaint_mask_dir", interactive=False)
 
                     img2img_tabs = [tab_img2img, tab_sketch, tab_inpaint, tab_inpaint_color, tab_inpaint_upload]
                     img2img_image_inputs = [init_img, sketch, init_img_with_mask, inpaint_color_sketch]
@@ -1028,9 +1024,9 @@ def create_ui():
                     inpaint_full_res,
                     inpaint_full_res_padding,
                     inpainting_mask_invert,
-                    # img2img_batch_input_dir,
-                    # img2img_batch_output_dir,
-                    # img2img_batch_inpaint_mask_dir,
+                    img2img_batch_input_dir,
+                    img2img_batch_output_dir,
+                    img2img_batch_inpaint_mask_dir,
                     override_settings,
                 ] + custom_inputs + [img2img_model_title, img2img_vae_title],
                 outputs=[
@@ -1047,8 +1043,8 @@ def create_ui():
                 _js="get_img2img_tab_index",
                 inputs=[
                     dummy_component,
-                    # img2img_batch_input_dir,
-                    # img2img_batch_output_dir,
+                    img2img_batch_input_dir,
+                    img2img_batch_output_dir,
                     init_img,
                     sketch,
                     init_img_with_mask,
