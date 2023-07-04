@@ -1,4 +1,5 @@
 import html
+import json
 import logging
 import sys
 import threading
@@ -7,6 +8,7 @@ import traceback
 import time
 import functools
 
+import gradio as gr
 import gradio.routes
 
 import modules.system_monitor
