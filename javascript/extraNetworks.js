@@ -409,7 +409,7 @@ async function handleData({response, tabname, model_type }) {
             <div class="set-bg-filter"></div>
             <div class="metadata-button" title="Show metadata" onclick="extraNetworksRequestMetadata(event, '${model_type}', '${item.name}')"></div>
             <div class="actions">
-                <div class="additional">
+                <div class="additional" style="display: none">
                     <ul>
                         <a title="replace preview image with currently selected in gallery" onclick="return saveCardPreview(event, '${tabname}', '${model_type}/${item.name}.png')" target="_blank">
                             set private preview
