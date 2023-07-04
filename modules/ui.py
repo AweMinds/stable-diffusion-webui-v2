@@ -1832,17 +1832,20 @@ def create_ui():
                             default_sd_checkpoint if default_sd_checkpoint else "")
                         sd_checkpoint_component_args["value"] = default_sd_checkpoint_container["sd_model_checkpoint"]
                         return sd_checkpoint_component_args
+
                     sd_model_selection = sd_checkpoint_options.component(
                         label=sd_checkpoint_options.label,
                         elem_id="sd_model_checkpoint_dropdown",
                         elem_classes=["quicksettings"],
-                        visible=True,
+                        visible=False,
                         **update_sd_model_selection_args())
+
                     create_refresh_button(
                         sd_model_selection,
                         sd_checkpoint_options.refresh,
                         sd_checkpoint_options.component_args,
-                        "refresh_sd_model_checkpoint_dropdown")
+                        "refresh_sd_model_checkpoint_dropdown",
+                        visible=False)
 
                     # AWETODO: Graviti版本不再使用config来设置quick setting，所以挪一下代码的位置，保证顺利保持与之前一直
                     # Quicksetting is not used here, but keep it so the program will not throw any error
