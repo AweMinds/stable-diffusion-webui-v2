@@ -407,7 +407,7 @@ async function handleData({response, tabname, model_type }) {
 
         cardNode.innerHTML = `
             <div class="set-bg-filter"></div>
-            <div class="metadata-button" title="Show metadata" onclick="extraNetworksRequestMetadata(event, '${model_type}', '${item.name}')"></div>
+            <div style="display: none" class="metadata-button" title="Show metadata" onclick="extraNetworksRequestMetadata(event, '${model_type}', '${item.name}')"></div>
             <div class="actions">
                 <div class="additional" style="display: none">
                     <ul>
