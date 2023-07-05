@@ -417,7 +417,7 @@ async function handleData({response, tabname, model_type }) {
                     </ul>
                     <span class="search_term" style="display: none;">${item.search_term || ''}</span>
                 </div>
-                <span class="name">${item.name_for_extra}</span>
+                <span class="name">${connectNewModelApi ? item.name_for_extra : item.name}</span>
                 <span class="description"></span>
             </div>
 

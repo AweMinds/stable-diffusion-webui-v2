@@ -36,6 +36,7 @@ def register_page(page):
     allowed_dirs.update(set(sum([x.allowed_directories_for_previews() for x in extra_pages], [])))
 
 
+# AWETODO: 获取封面的方法
 def fetch_file(request: Request, filename: str = "", model_type: str = ""):
     from starlette.responses import FileResponse
 
@@ -239,16 +240,9 @@ class ExtraNetworksPage:
         item["user_metadata"] = metadata
 
     def link_preview(self, filename):
-        model_type = self.name.replace(" ", "_")
-        filename_unix = os.path.abspath(filename.replace('\\', '/'))
-        if model_type not in preview_search_dir:
-            preview_search_dir[model_type] = list()
-        dirpath = os.path.dirname(filename_unix)
-        if dirpath and (dirpath not in preview_search_dir[model_type]):
-            preview_search_dir[model_type].append(dirpath)
-        return "/sd_extra_networks/thumb?filename=" + \
-               urllib.parse.quote(os.path.basename(filename_unix)) + \
-               "&model_type=" + model_type + "&mtime=" + str(os.path.getmtime(filename))
+        quoted_filename = urllib.parse.quote(filename.replace('\\', '/'))
+        mtime = os.path.getmtime(filename)
+        return f"./sd_extra_networks/thumb?filename={quoted_filename}&mtime={mtime}"
 
     def search_terms_from_path(self, filename, possible_directories=None):
         abspath = os.path.abspath(filename)
