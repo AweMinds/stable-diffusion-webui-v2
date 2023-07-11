@@ -3,9 +3,7 @@ name: Build Docker image and push
 on:
   workflow_dispatch:
   push:
-    branches: [ "aweminds" ]
-  pull_request:
-    branches: [ "aweminds" ]
+    branches: [ "diffus-merge" ]
 
 env:
   REGISTRY: registry.cn-shanghai.aliyuncs.com
@@ -43,14 +41,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: true
-          file: ./Dockerfile_update
+          file: ./Dockerfile
           #tags: ${{ steps.meta.outputs.tags }}
           tags: |
-              registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:latest-amd64
-              registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:${{ steps.date.outputs.today }}
+              registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:snapshot-latest
+              registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:snapshot-${{ steps.date.outputs.today }}
           labels: ${{ steps.meta.outputs.labels }}
           
-  trigger-deploy-to-248:
+  trigger-deploy-to-170:
     needs: build_and_publish
     runs-on: ubuntu-latest
     outputs:
@@ -60,44 +58,18 @@ jobs:
         id: manual-trigger
         uses: benhamiltonpro/manual-trigger@v1
         with:
-          RUN_NAME: "deploying-248"        
+          RUN_NAME: "deploying-170"        
   
-  deploying-248:
-      needs: trigger-deploy-to-248
-      if: ${{ needs.trigger-deploy-to-248.outputs.CONTINUE_JOBS == 'true' }}
+  deploying-170:
+      needs: trigger-deploy-to-170
+      if: ${{ needs.trigger-deploy-to-170.outputs.CONTINUE_JOBS == 'true' }}
       runs-on: ubuntu-latest
       steps:
-        - name: Deploy to fantuyun 248
+        - name: Deploy to kaopuyun 170
           uses: easingthemes/ssh-deploy@main
           env:
-            REMOTE_HOST: ${{ secrets.FANTUYUN_248_SERVER_HOST }}
-            REMOTE_USER: ${{ secrets.FANTUYUN_248_SERVER_USER }}
-            SSH_PRIVATE_KEY: ${{ secrets.FANTUYUN_248_PRIVATE_KEY }}
-            SCRIPT_BEFORE: |
-              /app/update.sh
-  
-  trigger-deploy-to-253:
-    needs: deploying-248
-    runs-on: ubuntu-latest
-    outputs:
-        CONTINUE_JOBS: ${{ steps.manual-trigger.outputs.CONTINUE_JOBS }}
-    steps:
-      - name: manual-trigger
-        id: manual-trigger
-        uses: benhamiltonpro/manual-trigger@v1
-        with:
-          RUN_NAME: "deploying-253"
-  
-  deploying-253:
-      needs: trigger-deploy-to-253
-      if: ${{ needs.trigger-deploy-to-253.outputs.CONTINUE_JOBS == 'true' }}
-      runs-on: ubuntu-latest
-      steps:
-        - name: Deploy to fantuyun 253
-          uses: easingthemes/ssh-deploy@main
-          env:
-            REMOTE_HOST: ${{ secrets.FANTUYUN_253_SERVER_HOST }}
-            REMOTE_USER: ${{ secrets.FANTUYUN_253_SERVER_USER }}
-            SSH_PRIVATE_KEY: ${{ secrets.FANTUYUN_253_PRIVATE_KEY }}
+            REMOTE_HOST: ${{ secrets.KAOPUYUN_170_SERVER_HOST }}
+            REMOTE_USER: ${{ secrets.KAOPUYUN_170_SERVER_USER }}
+            SSH_PRIVATE_KEY: ${{ secrets.KAOPUYUN_170_PRIVATE_KEY }}
             SCRIPT_BEFORE: |
               /app/update.sh
