@@ -26,6 +26,7 @@ RUN ln -s /app/venv/lib/python3.10/site-packages/torch/lib/libnvrtc-672ee683.so.
 #更新代码
 COPY . .
 RUN ./webui.sh -f --skip-torch-cuda-test --exit
+RUN mkdir /tmp/gradio
 
 ## 暴露端口
 EXPOSE 7860
