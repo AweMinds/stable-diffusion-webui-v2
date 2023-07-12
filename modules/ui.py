@@ -36,6 +36,7 @@ from modules.ui_common import create_upload_button, create_browse_model_button
 import modules.hypernetworks.ui
 from modules.generation_parameters_copypaste import image_from_url_text
 import modules.extras
+import modules.load_balancer as load_balancer
 
 warnings.filterwarnings("default" if opts.show_warnings else "ignore", category=UserWarning)
 
@@ -501,6 +502,7 @@ def create_ui():
     modules.scripts.scripts_current = modules.scripts.scripts_txt2img
     # WEBUILOGIC: txt2img脚本初始化
     modules.scripts.scripts_txt2img.initialize_scripts(is_img2img=False)
+    load_balancer_addr = shared.cmd_opts.load_balancer_addr
 
     def on_width_or_height_change(width, height, batch_size):
         if width * height > 1024 * 1024:
@@ -634,7 +636,8 @@ def create_ui():
 
             txt2img_args = dict(
                 fn=wrap_gradio_gpu_call(
-                    modules.txt2img.txt2img, func_name='txt2img', extra_outputs=[None, '', ''], add_monitor_state=True),
+                    modules.txt2img.txt2img, func_name='txt2img', extra_outputs=[None, '', ''],
+                    add_monitor_state=True) if not load_balancer_addr else load_balancer.submit_click_fn,
                 _js="submit",
                 inputs=[
                     dummy_component,

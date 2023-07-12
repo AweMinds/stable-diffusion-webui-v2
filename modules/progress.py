@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field
 from modules.shared import opts
 
 import modules.shared as shared
+import modules.load_balancer as load_balancer
 
 current_task = None
 current_task_step = ''
@@ -151,6 +152,11 @@ def setup_progress_api(app):
 
 
 def progressapi(req: ProgressRequest):
+    # 如果启用了负载均衡，则通过负载均衡器去查询进展
+    load_balancer_addr = shared.cmd_opts.load_balancer_addr
+    if load_balancer_addr:
+        return load_balancer.query_progress(req.id_task)
+
     active = req.id_task == current_task
     queued = req.id_task in pending_tasks
     completed = req.id_task in finished_tasks

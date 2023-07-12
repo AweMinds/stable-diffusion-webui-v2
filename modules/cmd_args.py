@@ -120,3 +120,4 @@ parser.add_argument("--model-cache-dir", type=str,  help="User can use a ssd to 
 parser.add_argument("--model-cache-max-size", type=int,  help="The maximum disk space (GB) to use to cache the model. Need to set --model-cache-dir first.", default=0)
 parser.add_argument("--predict-timeout", type=int,  help="Timeout in second of /predict.", default=1800)
 parser.add_argument("--enable-html-footer", action='store_true', help="Add custom html header and footer to webui", default=False)
+parser.add_argument("--load-balancer-addr", type=str,  help="a remote server who can load balancing inference calls", default='')
