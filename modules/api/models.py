@@ -322,3 +322,11 @@ class GetTaskCountResponse(BaseModel):
     queued_tasks: dict = Field(title="QueuedTasks")
     finished_task_count: int = Field(title="FinishedTaskCount")
     failed_task_count: int = Field(title="FailedTaskCount")
+
+
+class GetCurrentModelResponse(BaseModel):
+    title: str = Field(default=None, title="title")
+    name: str = Field(default=None, title="name")
+    model_name: str = Field(default=None, title="model_name")
+    shorthash: str = Field(default=None, title="shorthash")
+    sha256: str = Field(default=None, title="sha256")
