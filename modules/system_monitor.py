@@ -172,7 +172,9 @@ def _extract_task_id(*args):
 
 
 def on_task(request: gr.Request, func, task_info, *args, **kwargs):
-    print(f"---------task:{_extract_task_id(*args)} started------------")
+    uid = modules.user.User.current_user(request).uid
+    print(f"---------task:{_extract_task_id(*args)} started by user:{uid}------------")
+
 
     # AWETODO：实现system monitor, 启动的时候带上服务器地址和secret
     monitor_addr = modules.shared.cmd_opts.system_monitor_addr

@@ -276,6 +276,7 @@ def update_token_counter(text, steps):
 
 def create_toprow(is_img2img):
     id_part = "img2img" if is_img2img else "txt2img"
+    load_balancer_addr = shared.cmd_opts.load_balancer_addr
 
     with gr.Row(elem_id=f"{id_part}_toprow", variant="compact"):
         with gr.Column(elem_id=f"{id_part}_prompt_container", scale=6):
@@ -314,20 +315,24 @@ def create_toprow(is_img2img):
                 model_title = gr.Textbox(elem_id=f"{id_part}_model_title", value=get_sd_model_title_from_setting(), visible=False)
                 vae_model_title = gr.Textbox(elem_id=f"{id_part}_vae_model_title", value=get_sd_vae_title_from_setting(), visible=False)
 
+                # AWETODO: interrupt和skip的处理函数
                 def _make_interrupt_cb(cb):
                     def f(request: gr.Request, task_id: str, task_type: str):
                         if task_id == progress.current_task:
                             cb()
                     return f
+
                 skip.click(
-                    fn=_make_interrupt_cb(shared.state.skip),
+                    fn=_make_interrupt_cb(
+                        shared.state.skip) if not load_balancer_addr else load_balancer.skip_inference,
                     _js='getImageGenerationTaskId',
                     inputs=[id_task, tab_name],
                     outputs=[],
                 )
 
                 interrupt.click(
-                    fn=_make_interrupt_cb(shared.state.interrupt),
+                    fn=_make_interrupt_cb(
+                        shared.state.interrupt) if not load_balancer_addr else load_balancer.interrupt_inference,
                     _js='getImageGenerationTaskId',
                     inputs=[id_task, tab_name],
                     outputs=[],

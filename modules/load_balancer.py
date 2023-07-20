@@ -103,6 +103,27 @@ def query_progress(id_task):
                             textinfo=json_loads['textinfo'])
 
 
+def inference_action(action: str, id_task: str, task_type: str):
+    system_monitor_api_secret = shared.cmd_opts.system_monitor_api_secret
+    node_ip = shared.inference_node_info['ipPort']
+    request_url = f"http://{node_ip}/daemon/v1/{action}"
+    data = {"id_task": id_task}
+    header_data = {"Content-Type": "application/json", "Api-Secret": system_monitor_api_secret}
+
+    post = requests.post(url=request_url, json=data, headers=header_data)
+    json_loads = json.loads(post.text)
+    print("----json_loads----")
+    print(json_loads)
+
+
+def interrupt_inference(id_task: str, task_type: str):
+    inference_action("interrupt", id_task, task_type)
+
+
+def skip_inference(id_task: str, task_type: str):
+    inference_action("skip", id_task, task_type)
+
+
 class ProgressResponse(BaseModel):
     active: bool = Field(title="Whether the task is being worked on right now")
     queued: bool = Field(title="Whether the task is in queue")
