@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 
 import requests
 from pydantic import BaseModel, Field
@@ -20,7 +21,7 @@ def get_fastest_inference_node(data):
     request_url = f'{balancer_addr}/balancing'
     response = requests.post(url=request_url, json=json.dumps(data), headers={"Content-Type": "application/json"})
 
-    if response.status_code is not 200:
+    if response.status_code != 200:
         logger.error("can not get inference node info")
         # raise gr.Error("can not get inference node info")
 
@@ -65,7 +66,20 @@ def submit_click_fn(*args):
     file_paths = []
     for img in data[0]:
         img_url = f'http://{node_ip}/file=' + img['name']
-        file_paths.append(img_url)
+        file_name = img['name']
+        if os.path.exists(file_name):
+            file_paths.append(file_name)
+            continue
+
+        res = requests.get(img_url)
+        if res.status_code == 200:
+            with open(file_name, "wb") as f:
+                f.write(res.content)
+                file_paths.append(file_name)
+                logger.info('Image sucessfully Downloaded: ', file_name)
+        else:
+            logger.error('Image Couldn\'t be retrieved')
+            logger.error(res.status_code)
 
     return (file_paths,) + tuple(data)[1:]
 
