@@ -1,8 +1,10 @@
 from fastapi import FastAPI, Depends, Request, HTTPException
 
-from modules.api.models import GetTaskCountResponse, GetDaemonStatusResponse, UpdateStatusRequest, GetCurrentModelResponse
+from modules.api.models import GetTaskCountResponse, GetDaemonStatusResponse, UpdateStatusRequest, GetCurrentModelResponse, InterruptRequest
 import modules.progress
 import modules.shared
+import modules.shared as shared
+import modules.progress as progress
 
 # service is able to serve any requests
 DAEMON_STATUS_UP = 'up'
@@ -25,6 +27,8 @@ class DaemonApi:
         self._add_api_route("/daemon/v1/status", self.set_status, methods=["PUT"])
         self._add_api_route("/daemon/v1/pending-task-count", self.get_task_count, methods=["GET"], response_model=GetTaskCountResponse)
         self._add_api_route("/daemon/v1/current_model", self.get_current_model, methods=["GET"], response_model=GetCurrentModelResponse)
+        self._add_api_route("/daemon/v1/interrupt", self.interrupt_inference, methods=["POST"])
+        self._add_api_route("/daemon/v1/skip", self.skip_inference, methods=["POST"])
 
     def get_status(self):
         return GetDaemonStatusResponse(status=self._status)
@@ -66,3 +70,15 @@ class DaemonApi:
             return True
 
         raise HTTPException(status_code=401, detail="invalid API secret")
+
+    def interrupt_inference(self, request: InterruptRequest):
+        task_id = request.id_task
+        current_task_id = progress.current_task
+        if task_id == current_task_id:
+            shared.state.interrupt()
+
+    def skip_inference(self, request: InterruptRequest):
+        task_id = request.id_task
+        current_task_id = progress.current_task
+        if task_id == current_task_id:
+            shared.state.skip()

@@ -330,3 +330,7 @@ class GetCurrentModelResponse(BaseModel):
     model_name: str = Field(default=None, title="model_name")
     shorthash: str = Field(default=None, title="shorthash")
     sha256: str = Field(default=None, title="sha256")
+
+
+class InterruptRequest(BaseModel):
+    id_task: str = Field(title="id_task")
