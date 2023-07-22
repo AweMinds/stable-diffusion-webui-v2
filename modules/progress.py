@@ -152,10 +152,14 @@ def setup_progress_api(app):
 
 
 def progressapi(req: ProgressRequest):
-    # 如果启用了负载均衡，则通过负载均衡器去查询进展
     load_balancer_addr = shared.cmd_opts.load_balancer_addr
-    if load_balancer_addr:
-        return load_balancer.query_progress(req.id_task)
+    # 如果没有获取到节点信息，返回从本机查询进展
+    if load_balancer_addr and hasattr(shared, "inference_node_info"):
+        ip_port = shared.inference_node_info['ipPort']
+        node_name = shared.cmd_opts.node_name
+        # 如果ip不同，则通过负载均衡器去查询进展
+        if ip_port != node_name:
+            return load_balancer.query_progress(req.id_task)
 
     active = req.id_task == current_task
     queued = req.id_task in pending_tasks

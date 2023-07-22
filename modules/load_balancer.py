@@ -2,14 +2,37 @@ import json
 import logging
 import os
 
+import gradio
 import requests
+import starlette
 from pydantic import BaseModel, Field
 
 import modules.shared as shared
 from modules import sd_samplers
+from modules.call_queue import wrap_gradio_gpu_call
 from modules.sd_samplers import samplers_for_img2img
 
 logger = logging.getLogger(__name__)
+
+
+def get_inference_function(func, func_name: str = '', extra_outputs=None, add_monitor_state=False):
+    def wrap_func(request: gradio.routes.Request, *args, **kwargs):
+        load_balancer_addr = shared.cmd_opts.load_balancer_addr
+
+        host = get_header(request.headers, 'host')
+        inference_node_name = get_header(request.headers, 'inference-node')
+
+        if load_balancer_addr and not inference_node_name:
+            inference_node = get_fastest_inference_node(args)
+            node_name = inference_node.get('ipPort', None)
+            if host != node_name:
+                return balancing_inference(request, *args, **kwargs)
+
+        return wrap_gradio_gpu_call(
+            func, func_name=func_name, extra_outputs=extra_outputs, add_monitor_state=add_monitor_state)(
+            request, *args, **kwargs)
+
+    return wrap_func
 
 
 def get_fastest_inference_node(data):
@@ -28,7 +51,7 @@ def get_fastest_inference_node(data):
     inference_node_info = json.loads(response.text)
     shared.inference_node_info = inference_node_info['data']
 
-    return inference_node_info
+    return inference_node_info['data']
 
 
 def get_txt2img_predict_body(args, fn_index, session_hash, event_data):
@@ -51,17 +74,16 @@ def get_txt2img_predict_body(args, fn_index, session_hash, event_data):
     return dict_data
 
 
-def submit_click_fn(*args):
-    get_fastest_inference_node(args)
-
+def balancing_inference(request: gradio.routes.Request, *args, **kwargs):
     node_ip = shared.inference_node_info['ipPort']
     fn_index = shared.inference_node_info['fnIndex']
     session_hash = shared.inference_node_info['sessionHash']
 
     request_body = json.dumps(get_txt2img_predict_body(args, fn_index, session_hash, None))
+    request_header = {"Content-Type": "application/json", "inference-node": node_ip}
 
-    request_url = f'http://{node_ip}/run/predict'
-    post = requests.post(url=request_url, data=request_body, headers={"Content-Type": "application/json"})
+    request_url = f'http://{node_ip}/api/generate_btn_fn'
+    post = requests.post(url=request_url, data=request_body, headers=request_header)
     data = json.loads(post.text)['data']
     file_paths = []
     for img in data[0]:
@@ -85,11 +107,6 @@ def submit_click_fn(*args):
 
 
 def query_progress(id_task):
-    # 如果还没有获取到节点信息，返回默认值
-    if not hasattr(shared, "inference_node_info"):
-        return ProgressResponse(active=False, queued=False, completed=False, progress=None, eta=None, live_preview=None,
-                                id_live_preview=-1, textinfo=None)
-
     node_ip = shared.inference_node_info['ipPort']
     request_url = f"http://{node_ip}/internal/progress"
     data = {"id_task": id_task, "id_live_preview": 0}
@@ -110,10 +127,7 @@ def inference_action(action: str, id_task: str, task_type: str):
     data = {"id_task": id_task}
     header_data = {"Content-Type": "application/json", "Api-Secret": system_monitor_api_secret}
 
-    post = requests.post(url=request_url, json=data, headers=header_data)
-    json_loads = json.loads(post.text)
-    print("----json_loads----")
-    print(json_loads)
+    requests.post(url=request_url, json=data, headers=header_data)
 
 
 def interrupt_inference(id_task: str, task_type: str):
@@ -122,6 +136,13 @@ def interrupt_inference(id_task: str, task_type: str):
 
 def skip_inference(id_task: str, task_type: str):
     inference_action("skip", id_task, task_type)
+
+
+def get_header(headers, key):
+    if isinstance(headers, gradio.routes.Obj):
+        return getattr(headers, key, None)
+    if isinstance(headers, starlette.datastructures.Headers):
+        return headers.get(key, default=None)
 
 
 class ProgressResponse(BaseModel):

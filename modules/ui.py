@@ -640,9 +640,8 @@ def create_ui():
                 )
 
             txt2img_args = dict(
-                fn=wrap_gradio_gpu_call(
-                    modules.txt2img.txt2img, func_name='txt2img', extra_outputs=[None, '', ''],
-                    add_monitor_state=True) if not load_balancer_addr else load_balancer.submit_click_fn,
+                fn=load_balancer.get_inference_function(
+                    modules.txt2img.txt2img, func_name='txt2img', extra_outputs=[None, '', ''], add_monitor_state=True),
                 _js="submit",
                 inputs=[
                     dummy_component,
@@ -681,6 +680,7 @@ def create_ui():
                     need_upgrade
                 ],
                 show_progress=False,
+                api_name="generate_btn_fn"
             )
 
             txt2img_prompt.submit(**txt2img_args)
