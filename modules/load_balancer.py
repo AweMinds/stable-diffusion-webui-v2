@@ -98,10 +98,11 @@ def balancing_inference(request: gradio.routes.Request, *args, **kwargs):
             with open(file_name, "wb") as f:
                 f.write(res.content)
                 file_paths.append(file_name)
-                logger.info('Image sucessfully Downloaded: ', file_name)
+                print(f'Image Successfully Downloaded: {file_name}')
         else:
-            logger.error('Image Couldn\'t be retrieved')
-            logger.error(res.status_code)
+            print('Image Could not be retrieved:')
+            print(res.text)
+            print(res.status_code)
 
     return (file_paths,) + tuple(data)[1:]
 
