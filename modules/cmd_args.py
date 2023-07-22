@@ -121,3 +121,4 @@ parser.add_argument("--model-cache-max-size", type=int,  help="The maximum disk 
 parser.add_argument("--predict-timeout", type=int,  help="Timeout in second of /predict.", default=1800)
 parser.add_argument("--enable-html-footer", action='store_true', help="Add custom html header and footer to webui", default=False)
 parser.add_argument("--load-balancer-addr", type=str,  help="a remote server who can load balancing inference calls", default='')
+parser.add_argument("--node-name", type=str, help="inference node name(ip:port)", default='')
