@@ -14,7 +14,7 @@ RUN apt install -y libgl1-mesa-glx libglib2.0-0 google-perftools sox ffmpeg libc
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 #clone代码
-RUN git clone -b diffus-merge https://github.com/AweMinds/stable-diffusion-webui.git .
+RUN git clone -b aweminds https://github.com/AweMinds/stable-diffusion-webui.git .
 
 # 安装webUI依赖
 RUN ./webui.sh -f --xformers --skip-torch-cuda-test --exit
