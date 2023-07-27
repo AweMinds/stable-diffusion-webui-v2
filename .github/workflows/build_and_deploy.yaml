@@ -43,7 +43,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: true
-          file: ./Dockerfile_update
+          file: ./Dockerfile
           #tags: ${{ steps.meta.outputs.tags }}
           tags: |
               registry.cn-shanghai.aliyuncs.com/aweminds/aweminds-webui:latest-amd64
