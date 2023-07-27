@@ -30,10 +30,18 @@ httpcore<=0.15
 fastapi==0.94.0
 redis==4.5.4
 
-##dependency of controlnet
+##dependency of extensions
 #sd-webui-controlnet
 mediapipe
 svglib
 fvcore
-#sd-webui-controlnet
 diffusers
+# sd-webui-roop
+insightface==0.7.3
+onnx==1.14.0
+onnxruntime==1.15.0
+opencv-python==4.7.0.72
+ifnude
+cython
+#sd-webui-inpaint-anything
+pytorch-transformers
