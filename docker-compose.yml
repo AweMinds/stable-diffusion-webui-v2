@@ -6,6 +6,7 @@ services:
     container_name: webui0
     environment:
       START_ARGS: "--listen --logging-file-dir ./logs --logging-level DEBUG --theme dark --opt-channelslast --xformers --no-half-vae --upcast-sampling --opt-split-attention --enable-html-footer --system-monitor-addr https://aweminds.cn:8080/api/monitor --system-monitor-api-secret i7fJoi2leRvtcqVb3uLqw9Bv"
+      HOST_IP: 192.168.1.152:7860
     ports:
       - "7860:7860"
     restart: on-failure
@@ -16,6 +17,8 @@ services:
       - /stable-diffusion-webui/repositories:/app/repositories
       - /stable-diffusion-webui/scripts:/app/scripts
       - /root/.cache:/root/.cache
+      - /root/.ifnude:/root/.ifnude
+      - /root/.insightface:/root/.insightface
       - /stable-diffusion-webui/ui-config.json:/app/ui-config.json
       - /stable-diffusion-webui/config.json:/app/config.json
       - /etc/timezone:/etc/timezone
@@ -33,7 +36,7 @@ services:
     container_name: webui1
     environment:
       START_ARGS: "--listen --logging-file-dir ./logs --logging-level DEBUG --theme dark --opt-channelslast --xformers --no-half-vae --upcast-sampling --opt-split-attention --enable-html-footer --system-monitor-addr https://aweminds.cn:8080/api/monitor --system-monitor-api-secret i7fJoi2leRvtcqVb3uLqw9Bv"
-      UPDATE_CODE: 1
+      HOST_IP: 192.168.1.152:7861
     ports:
       - "7861:7860"
     restart: on-failure
@@ -44,6 +47,8 @@ services:
       - /stable-diffusion-webui/repositories:/app/repositories
       - /stable-diffusion-webui/scripts:/app/scripts
       - /root/.cache:/root/.cache
+      - /root/.ifnude:/root/.ifnude
+      - /root/.insightface:/root/.insightface
       - /stable-diffusion-webui/ui-config.json:/app/ui-config.json
       - /stable-diffusion-webui/config.json:/app/config.json
       - /etc/timezone:/etc/timezone
@@ -61,7 +66,7 @@ services:
     container_name: webui2
     environment:
       START_ARGS: "--listen --logging-file-dir ./logs --logging-level DEBUG --theme dark --opt-channelslast --xformers --no-half-vae --upcast-sampling --opt-split-attention --enable-html-footer --system-monitor-addr https://aweminds.cn:8080/api/monitor --system-monitor-api-secret i7fJoi2leRvtcqVb3uLqw9Bv"
-      UPDATE_CODE: 1
+      HOST_IP: 192.168.1.152:7862
     ports:
       - "7862:7860"
     restart: on-failure
@@ -72,6 +77,8 @@ services:
       - /stable-diffusion-webui/repositories:/app/repositories
       - /stable-diffusion-webui/scripts:/app/scripts
       - /root/.cache:/root/.cache
+      - /root/.ifnude:/root/.ifnude
+      - /root/.insightface:/root/.insightface
       - /stable-diffusion-webui/ui-config.json:/app/ui-config.json
       - /stable-diffusion-webui/config.json:/app/config.json
       - /etc/timezone:/etc/timezone
@@ -89,7 +96,7 @@ services:
     container_name: webui3
     environment:
       START_ARGS: "--listen --logging-file-dir ./logs --logging-level DEBUG --theme dark --opt-channelslast --xformers --no-half-vae --upcast-sampling --opt-split-attention --enable-html-footer --system-monitor-addr https://aweminds.cn:8080/api/monitor --system-monitor-api-secret i7fJoi2leRvtcqVb3uLqw9Bv"
-      UPDATE_CODE: 1
+      HOST_IP: 192.168.1.152:7863
     ports:
       - "7863:7860"
     restart: on-failure
@@ -100,6 +107,8 @@ services:
       - /stable-diffusion-webui/repositories:/app/repositories
       - /stable-diffusion-webui/scripts:/app/scripts
       - /root/.cache:/root/.cache
+      - /root/.ifnude:/root/.ifnude
+      - /root/.insightface:/root/.insightface
       - /stable-diffusion-webui/ui-config.json:/app/ui-config.json
       - /stable-diffusion-webui/config.json:/app/config.json
       - /etc/timezone:/etc/timezone
