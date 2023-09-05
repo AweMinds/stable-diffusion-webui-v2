@@ -1033,6 +1033,7 @@ def create_ui():
             connect_reuse_seed(seed, reuse_seed, generation_info, dummy_component, is_subseed=False)
             connect_reuse_seed(subseed, reuse_subseed, generation_info, dummy_component, is_subseed=True)
 
+            # AWETODO: img2img参数变化的响应事件
             selectors = [batch_count, width, height, batch_size, steps]
             for selector in selectors:
                 selector.change(
@@ -1663,30 +1664,25 @@ def create_ui():
     for _interface, label, _ifid in interfaces:
         shared.tab_names.append(label)
 
-    with gr.Blocks(theme=shared.gradio_theme, analytics_enabled=False, title="GRAVITI Diffus") as demo:
-        with gr.Row():
-             with gr.Column(elem_id="user-setting", min_width=500, scale=2):
-                gr.HTML(
-                    value="<div class='user-content'>"
-                            "<div class='right-content'>"
-                            "<div id='discord' class='discord-icon'><a title='Join Discord' href='https://discord.gg/QfBbBYqQ7z'><img src='/public/image/discord.png' /></a></div>"
-                            "<div id='sign' title='' class='upgrade-content' style='display: none'><a><img /><span></span></a></div>"
-                            "<div id='package' title='Credits Package' class='upgrade-content' style='display: none'><a><img src='/public/image/package.png' /><span></span></a></div>"
-                            "<div id='upgrade' title='Unlock more credits' class='upgrade-content' style='display: none'><a href='/user#/subscription?type=subscription'><img src='/public/image/lightning.png'/><span>Upgrade</span></a></div>"
-                            "</div>"
-                            "<div style='display: none;justify-content: flex-end;' class='user_info'><a href='/user'><img "
-                            "src=''"
-                            "/></a><div class='user_info-name'><span></span><a "
-                            "href='/api/logout' target='_self'>Log out</a></div></div></div>",
-                    show_label=False)
+    with gr.Blocks(theme=shared.gradio_theme, analytics_enabled=False, title="AweMinds") as demo:
+        # with gr.Row():
+        #      with gr.Column(elem_id="user-setting", min_width=500, scale=2):
+        #         gr.HTML(
+        #             value="<div class='user-content'>"
+        #                     "<div class='right-content'>"
+        #                     "<div id='discord' class='discord-icon'><a title='Join Discord' href='https://discord.gg/QfBbBYqQ7z'><img src='/public/image/discord.png' /></a></div>"
+        #                     "<div id='sign' title='' class='upgrade-content' style='display: none'><a><img /><span></span></a></div>"
+        #                     "<div id='package' title='Credits Package' class='upgrade-content' style='display: none'><a><img src='/public/image/package.png' /><span></span></a></div>"
+        #                     "<div id='upgrade' title='Unlock more credits' class='upgrade-content' style='display: none'><a href='/user#/subscription?type=subscription'><img src='/public/image/lightning.png'/><span>Upgrade</span></a></div>"
+        #                     "</div>"
+        #                     "<div style='display: none;justify-content: flex-end;' class='user_info'><a href='/user'><img "
+        #                     "src=''"
+        #                     "/></a><div class='user_info-name'><span></span><a "
+        #                     "href='/api/logout' target='_self'>Log out</a></div></div></div>",
+        #             show_label=False)
         with gr.Row(elem_id="topbar"):
             with gr.Column(scale=6, min_width=850):
                 with gr.Row(elem_id="quicksettings"):
-                    # Quicksetting is not used here, but keep it so the program will not throw any error
-                    for i, k, item in sorted(settings.quicksettings_list, key=lambda x: settings.quicksettings_names.get(x[1], x[0])):
-                        component = create_setting_component(k, is_quicksettings=True, visible=False, interactive=False)
-                        settings.component_dict[k] = component
-
                     # This is the real place to set sd checkpoint
                     sd_checkpoint_options = shared.opts.data_labels["sd_model_checkpoint"]
 
@@ -1704,20 +1700,36 @@ def create_ui():
                         label=sd_checkpoint_options.label,
                         elem_id="sd_model_checkpoint_dropdown",
                         elem_classes=["quicksettings"],
-                        visible=True,
+                        visible=False,
                         **update_sd_model_selection_args())
+
                     create_refresh_button(
                         sd_model_selection,
                         sd_checkpoint_options.refresh,
                         sd_checkpoint_options.component_args,
-                        "refresh_sd_model_checkpoint_dropdown")
-                    inspire_button = gr.Button(
-                        "Inspire me", elem_id="gallery_inspire_me_button", variant="primary")
-                    inspire_button.click(
-                        None,
-                        None,
-                        None,
-                        _js="showInspirationPopup")
+                        "refresh_sd_model_checkpoint_dropdown",
+                        visible=False)
+
+                    # AWETODO: Graviti版本不再使用config来设置quick setting，所以挪一下代码的位置，保证顺利保持与之前一直
+                    # Quicksetting is not used here, but keep it so the program will not throw any error
+                    for i, k, item in sorted(settings.quicksettings_list, key=lambda x: settings.quicksettings_names.get(x[1], x[0])):
+                        component = create_setting_component(k, is_quicksettings=True, visible=True, interactive=True)
+                        settings.component_dict[k] = component
+
+                    # 将Browse Models加回来
+                    create_browse_model_button(
+                        'Browse Models',
+                        'browse_' + k,
+                        button_style="width: 200px !important; align-self: flex-end;")
+
+                    # 去除inspire me按钮
+                    # inspire_button = gr.Button(
+                    #     "Inspire me", elem_id="gallery_inspire_me_button", variant="primary")
+                    # inspire_button.click(
+                    #     None,
+                    #     None,
+                    #     None,
+                    #     _js="showInspirationPopup")
 
                     def get_model_title_from_params(request: gr.Request, params):
                         # sd_models.checkpoint_tiles() is guaranteed to return at least one model title
@@ -1754,16 +1766,18 @@ def create_ui():
                         inputs=sd_model_selection,
                         outputs=[txt2img_model_title, img2img_model_title]
                     )
-                    create_browse_model_button(
-                        'Show workspace models',
-                        'browse_models_in_workspace',
-                        button_style="width: 200px !important; flex-grow: 0.3 !important; align-self: flex-end;",
-                        js_function="browseWorkspaceModels")
-                    create_browse_model_button(
-                        'Browse All Models',
-                        'browse_all_models',
-                        button_style="width: 200px !important; flex-grow: 0.3 !important; align-self: flex-end;",
-                        js_function="openWorkSpaceDialog")
+
+                    #去掉Show workspace models和Browse All Models按钮
+                    # create_browse_model_button(
+                    #     'Show workspace models',
+                    #     'browse_models_in_workspace',
+                    #     button_style="width: 200px !important; flex-grow: 0.3 !important; align-self: flex-end;",
+                    #     js_function="browseWorkspaceModels")
+                    # create_browse_model_button(
+                    #     'Browse All Models',
+                    #     'browse_all_models',
+                    #     button_style="width: 200px !important; flex-grow: 0.3 !important; align-self: flex-end;",
+                    #     js_function="openWorkSpaceDialog")
 
         parameters_copypaste.connect_paste_params_buttons()
 
