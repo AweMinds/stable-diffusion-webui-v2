@@ -26,10 +26,10 @@ def javascript_html(request: gr.Request):
     head += '<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>\n'
     head += '<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>\n'
     # head += '<script type="text/javascript" src="/public/js/calarity.js"></script>\n'
-    head += '<script type="text/javascript" src="/public/js/posthog.js?v=0.2"></script>\n'
+    head += '<script type="text/javascript" src="/components/js/posthog.js?v=0.2"></script>\n'
     head += '<script type="text/javascript" src="/components/js/notification/index.var.js"></script>\n'
     head += '<script type="text/javascript" src="/components/js/share/shareon.iife.js" defer init></script>\n'
-    head += '<script type="text/javascript" src="/public/js/js.cookie.js"></script>\n'
+    head += '<script type="text/javascript" src="/components/js/js.cookie.js"></script>\n'
     head += "<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager​.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-NJBVS8D');</script>\n"
     # These two lines of code are added for the original account, should be removed in the future TODO: EdC
     head += '<script async src="https://www.googletagmanager.com/gtag/js?id=G-6SKEYMGQ07"></script>\n'
