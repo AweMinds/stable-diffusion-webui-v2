@@ -283,12 +283,14 @@ function debounceCalcuteTimes(func, type, wait=1000,immediate) {
 const debounceCalcute = {
     'txt2img_generate': debounceCalcuteTimes(calcuCreditTimes, 'txt2img_generate'),
     'img2img_generate': debounceCalcuteTimes(calcuCreditTimes, 'img2img_generate'),
+    'extras_generate': debounceCalcuteTimes(calcuCreditTimes, 'extras_generate'),
 };
 
 
 async function calcuCreditTimes(width, height, batch_count, batch_size, steps, buttonId, hr_scale = 1, hr_second_pass_steps = 0, enable_hr = false) {
     try {
-        const response = await fetch(`/api/calculateConsume`, {
+        //AWETODO: 实现calculateConsume接口，生成图片所需的credit
+        const response = await fetch(`${aweApiUrl}/api/calculateConsume`, {
             method: "POST", 
             credentials: "include",
             headers: {
@@ -326,6 +328,10 @@ function updateGenerateBtn_txt2img(width = 512, height = 512, batch_count = 1, b
 
 function updateGenerateBtn_img2img(width = 512, height = 512, batch_count = 1, batch_size = 1, steps = 20) {
     debounceCalcute['img2img_generate'](width, height, batch_count, batch_size, steps, 'img2img_generate');
+}
+
+function updateGenerateBtn_extras(resize_width = 512, resize_height = 512, resize_scale = 1) {
+    debounceCalcute['extras_generate'](resize_width, resize_height, 0, 0, 0, 'extras_generate', resize_scale);
 }
 
 
@@ -1026,6 +1032,7 @@ onUiLoaded(function(){
     // update generate button text
     updateGenerateBtn_txt2img();
     updateGenerateBtn_img2img();
+    updateGenerateBtn_extras();
 
     getModelFromUrl();
 
@@ -1042,7 +1049,7 @@ onUiLoaded(function(){
     setTimeout(monitorSignatureChange, 30000);
     pullNewSubscribers();
 
-    fetch(`/api/order_info`, {method: "GET", credentials: "include"}).then(res => {
+    fetch(`${aweApiUrl}/api/order_info`, {method: "GET", credentials: "include"}).then(res => {
         if (res && res.ok && !res.redirected) {
             return res.json();
         }
