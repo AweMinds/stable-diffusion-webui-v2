@@ -1810,7 +1810,7 @@ def create_ui():
         footer = shared.html("footer.html")
         languages = list(localization.localizations.keys())
         languages.sort()
-        footer = footer.format(versions=versions_html(), language_list=['None'] + languages)
+        footer = footer.format(versions="", language_list=['None'] + languages, icp_license=icp_license_html())
         gr.HTML(footer, elem_id="footer")
         settings.add_functionality(demo, sd_model_selection)
 
@@ -1984,3 +1984,11 @@ def setup_ui_api(app):
             output_placeholders=img2img_suffix_outputs
         ),
         methods=["GET"])
+
+
+def icp_license_html():
+    return f"""
+    <div class="icp_license">
+            ©2023 深圳奥茗智源科技有限公司 版权所有 <a href="https://beian.miit.gov.cn">粤ICP备2023060458号</a>
+    </div>
+    """
