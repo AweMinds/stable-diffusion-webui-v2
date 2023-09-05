@@ -12,6 +12,7 @@ import asyncio
 from datetime import datetime
 from PIL import Image
 
+import gradio as gr
 import gradio.routes
 
 import modules.system_monitor
@@ -101,7 +102,18 @@ def wrap_gpu_call(request: gradio.routes.Request, func, func_name, id_task, *arg
         logger.error(f'task {id_task} failed: {e.__str__()}')
         res = extra_outputs_array + [str(e)]
         if add_monitor_state:
-            return res, e.status_code == 402
+            # AWETODO: monitor的错误处理
+            if 399 < e.status_code < 500:
+                print("---------MonitorException------")
+                print(e.__str__())
+                err_response_string = e.__repr__()
+                err_resp_json = json.loads(err_response_string)
+                errcode = err_resp_json['message']['errcode']
+                errmsg = err_resp_json['message']['errmsg']
+                raise gr.Error(f'error code:{errcode},{errmsg}')
+
+            # AWETODO: 根据/monitor接口返回的httpcode（399~500），判断是否需要upgrade，最后一个值是need_upgrade
+            return res, 399 < e.status_code < 500
         return res
     except Exception as e:
         logger.error(f'task {id_task} failed: {e.__str__()}')
