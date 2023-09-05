@@ -315,7 +315,11 @@ async function calcuCreditTimes(width, height, batch_count, batch_size, steps, b
         });
         const { inference } = await response.json();
         const buttonEle = gradioApp().querySelector(`#${buttonId}`);
-        buttonEle.innerHTML = `Generate <span>(Use ${inference} ${inference === 1 ? 'credit)': 'credits)'}</span> `;
+        if (inference === 9999) {
+            buttonEle.innerHTML = `Generate <span>&nbsp;( 图像过大，请调整 )</span> `;
+        } else {
+            buttonEle.innerHTML = `Generate <span>&nbsp;(消耗 ${inference} ${inference === 1 ? '积分)' : '积分)'}</span> `;
+        }
     } catch(e) {
         console.log(e);
     }
