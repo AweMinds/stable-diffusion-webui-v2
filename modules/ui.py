@@ -1697,6 +1697,7 @@ def create_ui():
         #                     "/></a><div class='user_info-name'><span></span><a "
         #                     "href='/api/logout' target='_self'>Log out</a></div></div></div>",
         #             show_label=False)
+        # AWETODO: quicksetting区域
         with gr.Row(elem_id="topbar"):
             with gr.Column(scale=6, min_width=850):
                 with gr.Row(elem_id="quicksettings"):
@@ -1833,7 +1834,7 @@ def create_ui():
         languages.sort()
         footer = footer.format(versions="", language_list=['None'] + languages, icp_license=icp_license_html())
         gr.HTML(footer, elem_id="footer")
-        settings.add_functionality(demo, sd_model_selection)
+        settings.add_functionality(demo)
 
         update_image_cfg_scale_visibility = lambda: gr.update(visible=shared.sd_model and shared.sd_model.cond_stage_key == "edit")
         settings.text_settings.change(fn=update_image_cfg_scale_visibility, inputs=[], outputs=[image_cfg_scale])

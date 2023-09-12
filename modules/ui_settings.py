@@ -282,7 +282,7 @@ class UiSettings:
                 component = create_setting_component(k, is_quicksettings=True, interactive=self.interactive)
                 self.component_dict[k] = component
 
-    def add_functionality(self, demo, sd_model_selection):
+    def add_functionality(self, demo):
         self.submit.click(
             fn=wrap_gradio_call(lambda *args: self.run_settings(*args), extra_outputs=[gr.update()]),
             inputs=self.components,
@@ -326,8 +326,8 @@ class UiSettings:
         button_set_checkpoint.click(
             fn=set_checkpoint_when_click_on_card,
             _js="function(current, dummy){ var res = desiredCheckpointName; desiredCheckpointName = ''; return [res || current, current]; }",
-            inputs=[sd_model_selection, self.dummy_component],
-            outputs=[sd_model_selection],
+            inputs=[self.component_dict['sd_model_checkpoint'], self.dummy_component],
+            outputs=[self.component_dict['sd_model_checkpoint']],
         )
 
         component_keys = [k for k in opts.data_labels.keys() if k in self.component_dict]
