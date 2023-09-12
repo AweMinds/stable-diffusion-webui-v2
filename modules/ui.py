@@ -340,7 +340,8 @@ def create_toprow(is_img2img):
                 extra_networks_button = ToolButton(value=extra_networks_symbol, elem_id=f"{id_part}_extra_networks")
                 prompt_style_apply = ToolButton(value=apply_style_symbol, elem_id=f"{id_part}_style_apply")
                 save_style = ToolButton(value=save_style_symbol, elem_id=f"{id_part}_style_create")
-                restore_progress_button = ToolButton(value=restore_progress_symbol, elem_id=f"{id_part}_restore_progress", visible=False)
+                # 去除restore_progress按钮
+                # restore_progress_button = ToolButton(value=restore_progress_symbol, elem_id=f"{id_part}_restore_progress", visible=False)
 
                 token_counter = gr.HTML(value="<span>0/75</span>", elem_id=f"{id_part}_token_counter", elem_classes=["token-counter"])
                 token_button = gr.Button(visible=False, elem_id=f"{id_part}_token_button")
@@ -365,7 +366,7 @@ def create_toprow(is_img2img):
                 prompt_styles = gr.Dropdown(label="Styles", elem_id=f"{id_part}_styles", choices=[], value=[], multiselect=True)
                 create_refresh_button(prompt_styles, lambda _: _, current_prompt_styles, f"refresh_{id_part}_styles")
 
-    return prompt, prompt_styles, negative_prompt, submit, button_interrogate, button_deepbooru, prompt_style_apply, save_style, paste, extra_networks_button, token_counter, token_button, negative_token_counter, negative_token_button, restore_progress_button, model_title, vae_model_title
+    return prompt, prompt_styles, negative_prompt, submit, button_interrogate, button_deepbooru, prompt_style_apply, save_style, paste, extra_networks_button, token_counter, token_button, negative_token_counter, negative_token_button, model_title, vae_model_title
 
 
 def setup_progressbar(*args, **kwargs):
@@ -541,7 +542,7 @@ def create_ui():
         return gr.Slider.update(minimum=1, maximum=4, value=batch_size)
 
     with gr.Blocks(analytics_enabled=False) as txt2img_interface:
-        txt2img_prompt, txt2img_prompt_styles, txt2img_negative_prompt, submit, _, _, txt2img_prompt_style_apply, txt2img_save_style, txt2img_paste, extra_networks_button, token_counter, token_button, negative_token_counter, negative_token_button, restore_progress_button, txt2img_model_title, txt2img_vae_title = create_toprow(is_img2img=False)
+        txt2img_prompt, txt2img_prompt_styles, txt2img_negative_prompt, submit, _, _, txt2img_prompt_style_apply, txt2img_save_style, txt2img_paste, extra_networks_button, token_counter, token_button, negative_token_counter, negative_token_button, txt2img_model_title, txt2img_vae_title = create_toprow(is_img2img=False)
         need_upgrade = gr.Checkbox(
             value=False, interactive=False, visible=False, elem_classes="upgrade_checkbox")
         txt2img_signature = gr.Textbox(value="", interactive=False, visible=False, elem_id="txt2img_signature")
@@ -727,18 +728,19 @@ def create_ui():
             need_upgrade.change(None, [need_upgrade], None, _js="redirect_to_payment")
             res_switch_btn.click(fn=None, _js="function(){switchWidthHeight('txt2img')}", inputs=None, outputs=None, show_progress=False)
 
-            restore_progress_button.click(
-                fn=progress.restore_progress,
-                _js="restoreProgressTxt2img",
-                inputs=[dummy_component],
-                outputs=[
-                    txt2img_gallery,
-                    generation_info,
-                    html_info,
-                    html_log,
-                ],
-                show_progress=False,
-            )
+            # 去除restore_progress按钮
+            # restore_progress_button.click(
+            #     fn=progress.restore_progress,
+            #     _js="restoreProgressTxt2img",
+            #     inputs=[dummy_component],
+            #     outputs=[
+            #         txt2img_gallery,
+            #         generation_info,
+            #         html_info,
+            #         html_log,
+            #     ],
+            #     show_progress=False,
+            # )
 
             txt_prompt_img.change(
                 fn=modules.images.image_data,
@@ -821,7 +823,7 @@ def create_ui():
     modules.scripts.scripts_img2img.initialize_scripts(is_img2img=True)
 
     with gr.Blocks(analytics_enabled=False) as img2img_interface:
-        img2img_prompt, img2img_prompt_styles, img2img_negative_prompt, submit, img2img_interrogate, img2img_deepbooru, img2img_prompt_style_apply, img2img_save_style, img2img_paste, extra_networks_button, token_counter, token_button, negative_token_counter, negative_token_button, restore_progress_button, img2img_model_title, img2img_vae_title = create_toprow(is_img2img=True)
+        img2img_prompt, img2img_prompt_styles, img2img_negative_prompt, submit, img2img_interrogate, img2img_deepbooru, img2img_prompt_style_apply, img2img_save_style, img2img_paste, extra_networks_button, token_counter, token_button, negative_token_counter, negative_token_button, img2img_model_title, img2img_vae_title = create_toprow(is_img2img=True)
         img2img_need_upgrade = gr.Checkbox(
             value=False, interactive=False, visible=False, elem_classes="upgrade_checkbox")
         img2img_signature = gr.Textbox(value="", interactive=False, visible=False, elem_id="img2img_signature")
@@ -1170,18 +1172,19 @@ def create_ui():
                 show_progress=False,
             )
 
-            restore_progress_button.click(
-                fn=progress.restore_progress,
-                _js="restoreProgressImg2img",
-                inputs=[dummy_component],
-                outputs=[
-                    img2img_gallery,
-                    generation_info,
-                    html_info,
-                    html_log,
-                ],
-                show_progress=False,
-            )
+            # 去除restore_progress按钮
+            # restore_progress_button.click(
+            #     fn=progress.restore_progress,
+            #     _js="restoreProgressImg2img",
+            #     inputs=[dummy_component],
+            #     outputs=[
+            #         img2img_gallery,
+            #         generation_info,
+            #         html_info,
+            #         html_log,
+            #     ],
+            #     show_progress=False,
+            # )
 
             img2img_interrogate.click(
                 fn=lambda *args: process_interrogate(interrogate, *args),
