@@ -790,7 +790,7 @@ def create_ui():
                 (hr_prompts_container, lambda d: gr.update(visible=True) if d.get("Hires prompt", "") != "" or d.get("Hires negative prompt", "") != "" else gr.update()),
                 *modules.scripts.scripts_txt2img.infotext_fields
             ]
-            parameters_copypaste.add_paste_fields("txt2img", None, txt2img_paste_fields, override_settings)
+            parameters_copypaste.add_paste_fields("txt2img", None, txt2img_paste_fields, None)
             parameters_copypaste.register_paste_params_button(parameters_copypaste.ParamBinding(
                 paste_button=txt2img_paste, tabname="txt2img", source_text_component=txt2img_prompt, source_image_component=None,
             ))
