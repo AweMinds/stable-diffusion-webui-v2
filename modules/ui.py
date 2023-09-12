@@ -1713,21 +1713,23 @@ def create_ui():
                         sd_checkpoint_component_args["value"] = default_sd_checkpoint
                         return sd_checkpoint_component_args
 
-                    sd_model_selection = sd_checkpoint_options.component(
-                        label=sd_checkpoint_options.label,
-                        elem_id="sd_model_checkpoint_dropdown",
-                        elem_classes=["quicksettings"],
-                        visible=False,
-                        **update_sd_model_selection_args())
+                    # 去除Graviti版本的checkpoint选择框
+                    # sd_model_selection = sd_checkpoint_options.component(
+                    #     label=sd_checkpoint_options.label,
+                    #     elem_id="sd_model_checkpoint_dropdown",
+                    #     elem_classes=["quicksettings"],
+                    #     visible=False,
+                    #     **update_sd_model_selection_args())
 
-                    create_refresh_button(
-                        sd_model_selection,
-                        sd_checkpoint_options.refresh,
-                        sd_checkpoint_options.component_args,
-                        "refresh_sd_model_checkpoint_dropdown",
-                        visible=False)
+                    # 去除Graviti版本的checkpoint刷新按钮
+                    # create_refresh_button(
+                    #     sd_model_selection,
+                    #     sd_checkpoint_options.refresh,
+                    #     sd_checkpoint_options.component_args,
+                    #     "refresh_sd_model_checkpoint_dropdown",
+                    #     visible=False)
 
-                    # AWETODO: Graviti版本不再使用config来设置quick setting，所以挪一下代码的位置，保证顺利保持与之前一直
+                    # AWETODO: Graviti版本不再使用config来设置quick setting，所以挪一下代码的位置，保证顺利保持与之前一致
                     # Quicksetting is not used here, but keep it so the program will not throw any error
                     for i, k, item in sorted(settings.quicksettings_list, key=lambda x: settings.quicksettings_names.get(x[1], x[0])):
                         component = create_setting_component(k, is_quicksettings=True, visible=True, interactive=True)
@@ -1767,22 +1769,24 @@ def create_ui():
                         if ckpt_info is not None:
                             return ckpt_info.title
                         return checkpoint_tiles[0]
-                    txt2img_paste_fields.append((sd_model_selection, get_model_title_from_params))
-                    img2img_paste_fields.append((sd_model_selection, get_model_title_from_params))
 
-                    sd_model_selection.change(
-                        _js='on_sd_model_selection_updated',
-                        fn=None,
-                        inputs=sd_model_selection,
-                        outputs=[txt2img_model_title, img2img_model_title]
-                    )
+                    # 去除Graviti版本的checkpoint选择框的相关代码
+                    # txt2img_paste_fields.append((sd_model_selection, get_model_title_from_params))
+                    # img2img_paste_fields.append((sd_model_selection, get_model_title_from_params))
 
-                    sd_model_selection.select(
-                        _js='on_sd_model_selection_updated',
-                        fn=None,
-                        inputs=sd_model_selection,
-                        outputs=[txt2img_model_title, img2img_model_title]
-                    )
+                    # sd_model_selection.change(
+                    #     _js='on_sd_model_selection_updated',
+                    #     fn=None,
+                    #     inputs=sd_model_selection,
+                    #     outputs=[txt2img_model_title, img2img_model_title]
+                    # )
+                    #
+                    # sd_model_selection.select(
+                    #     _js='on_sd_model_selection_updated',
+                    #     fn=None,
+                    #     inputs=sd_model_selection,
+                    #     outputs=[txt2img_model_title, img2img_model_title]
+                    # )
 
                     #去掉Show workspace models和Browse All Models按钮
                     # create_browse_model_button(
@@ -1840,11 +1844,12 @@ def create_ui():
             return gr.update(**choices), gr.update(**choices)
         demo.load(fn=load_styles, inputs=None, outputs=[txt2img_prompt_styles, img2img_prompt_styles])
 
-        def update_sd_model_selection(request: gr.Request):
-            sd_checkpoint_component_args = update_sd_model_selection_args(request)
-            return gr.update(**sd_checkpoint_component_args)
-        demo.load(
-            fn=update_sd_model_selection, inputs=None, outputs=sd_model_selection)
+        # 去除Graviti版本的checkpoint选择框的相关代码
+        # def update_sd_model_selection(request: gr.Request):
+        #     sd_checkpoint_component_args = update_sd_model_selection_args(request)
+        #     return gr.update(**sd_checkpoint_component_args)
+        # demo.load(
+        #     fn=update_sd_model_selection, inputs=None, outputs=sd_model_selection)
 
         demo.load(
             fn=lambda: return_signature_str_from_list(txt2img_signature_args), inputs=None, outputs=txt2img_signature)

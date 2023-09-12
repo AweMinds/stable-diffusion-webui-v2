@@ -58,5 +58,5 @@ class SignForCredits {
 }
 
 onUiLoaded(function(){
-    new SignForCredits().showActivityButtonForUser();
+    // new SignForCredits().showActivityButtonForUser();
 })

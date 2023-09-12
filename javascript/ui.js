@@ -1041,17 +1041,17 @@ onUiLoaded(function(){
     getModelFromUrl();
 
     const {search} = location;
-    const isDarkTheme = /theme=dark/g.test(search);
-    if (isDarkTheme) {
-        const rightContent = gradioApp().querySelector(".right-content");
-        const imgNodes = rightContent.querySelectorAll("a > img");
-        imgNodes.forEach(item => {
-            item.style.filter = 'invert(100%)';
-        })
-    }
+    // const isDarkTheme = /theme=dark/g.test(search);
+    // if (isDarkTheme) {
+    //     const rightContent = gradioApp().querySelector(".right-content");
+    //     const imgNodes = rightContent.querySelectorAll("a > img");
+    //     imgNodes.forEach(item => {
+    //         item.style.filter = 'invert(100%)';
+    //     })
+    // }
 
     setTimeout(monitorSignatureChange, 30000);
-    pullNewSubscribers();
+    // pullNewSubscribers();
 
     fetch(`${aweApiUrl}/api/order_info`, {method: "GET", credentials: "include"}).then(res => {
         if (res && res.ok && !res.redirected) {
